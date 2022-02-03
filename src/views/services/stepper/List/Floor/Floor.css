@@ -1,0 +1,43 @@
+.blank-seat-rem {
+  margin-right: 1rem;
+}
+@media (max-width: 400px) {
+  .container {
+    padding: 0px !important;
+  }
+}
+.wcSize {
+  width: 30px;
+  fill: grey;
+}
+.left-border {
+  border-left: 1.5px solid rgb(206, 204, 204);
+}
+.seatContinueButton {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+.seatBtn {
+  width: 40px;
+  height: 40px;
+  min-width:0;
+  border-radius: 50%;
+}
+
+.floors {
+  border: 1px solid var(--var-dark-blue);
+}
+
+.floors h3 {
+  text-transform: capitalize;
+  color: black;
+}
+
+.floor-selected {
+  background-color: var(--var-dark-blue) !important;
+}
+
+.floor-selected h3 {
+  color: white;
+}
