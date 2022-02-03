@@ -417,6 +417,10 @@ nav.header_transparent.toolbar {
   background-color: rgba(23, 30, 51, 0.56);
 }
 
+nav .toolbar__content {
+  height: 80px !important;
+}
+
 nav.header_solid.toolbar {
   background-color: var(--var-dark-blue);
 }
