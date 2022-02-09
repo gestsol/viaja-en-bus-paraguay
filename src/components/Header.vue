@@ -96,7 +96,7 @@
             <v-flex md3 xs12 class="logo-vb">
               <v-toolbar-items>
                 <v-btn flat :dark="!logo" small @click="$router.push({ path: '/' })">
-                  <img v-if="logo" src="/static/imgs/logos/boletos-paraguay-logo.svg" alt class="principalLogo" />
+                  <img v-if="logo" src="/static/imgs/logos/logo boletos paraguay.svg" alt class="principalLogo" />
                 </v-btn>
               </v-toolbar-items>
             </v-flex>

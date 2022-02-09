@@ -25,10 +25,10 @@ export default {
         //   src: '/static/imgs/banners/Banner-4.png'
         // },
         {
-          src: '/static/imgs/banners/propuesta-banner-1.png'
+          src: '/static/imgs/banners/img-banner-1.png'
         },
         {
-          src: '/static/imgs/banners/propuesta-banner-2.png'
+          src: '/static/imgs/banners/img-banner-2.png'
         }
       ],
       itemsMobile: [
@@ -98,5 +98,11 @@ export default {
 
 .styledContentColor + span {
   text-shadow: 3px 2px 5px rgba(0, 0, 0, 0.5) !important;
+}
+
+@media (min-width: 960px) {
+  .flex.md3 {
+    max-width: 50% !important;
+  }
 }
 </style>
