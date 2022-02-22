@@ -1,6 +1,7 @@
 <template>
-  <v-container fluid class="pa-0">
-    <div class="services-banner">
+  <v-container fluid class="pa-0 pt-3">
+    <img style="width: 100vw" src="/static/imgs/banners/viaja-en-bus/paraguay_banner.png" alt="paraguay-banner">
+    <!-- <div class="services-banner">
       <v-carousel
         hide-delimiters
         hide-controls
@@ -14,7 +15,7 @@
           transition="fade"
         />
       </v-carousel>
-    </div>
+    </div> -->
   </v-container>
 </template>
 
@@ -29,7 +30,7 @@ export default {
         //   src: '/static/imgs/banners/viaja-en-bus/cybermonday.png'
         // },
         {
-          src: '/static/imgs/banners/viaja-en-bus/hotstgo.png'
+          src: '/static/imgs/banners/viaja-en-bus/paraguay_banner.png'
         }
       ]
     }
