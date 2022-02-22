@@ -416,7 +416,7 @@ const store = new Vuex.Store({
       })
       return servicesByPrice
     },
-    getServiceList: (state, getters) => (vuelta) =>{
+    getServiceList: (state, getters) => (vuelta) => {
       let servicesTemp = []
       let services = []
       getters.getServiceFiltered.forEach(item => {

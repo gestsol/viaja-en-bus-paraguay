@@ -132,29 +132,13 @@ export default {
   font-size: 30px;
 }
 
-.service-company-image {
-  margin-top: 20px;
-  width: 200px;
-  height: 50px;
-  max-width: 150px;
-  max-height: 100px;
-}
-
 @media (max-width: 1060px) {
-  .service-company-image {
-    width: 100px;
-    height: 25px;
-  }
   .stepper__content {
     padding: 0px !important;
   }
 }
 
 @media (max-width: 1060px) {
-  .service-company-image {
-    width: 60px;
-    height: 15px;
-  }
   .expansion-panel__header {
     padding-left: 0px !important;
     padding-right: 0px !important;

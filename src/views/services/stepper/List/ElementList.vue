@@ -14,7 +14,11 @@
                   <v-flex xs4 md6>
                     <v-layout row wrap>
                       <v-flex>
-                        <img :src="'data:image;base64,' + company.data[0].logo" class="service-company-image">
+                        <img
+                          :src="ciudadOrigen === '13101420' ?
+                          '/static/imgs/logos/NSA.png':
+                          '/static/imgs/logos/expreso paraguay.png'"
+                          class="service-company-image">
                       </v-flex>
                       <v-flex>
                         <br>{{company.data.length}} {{translate('departures')}}
@@ -399,30 +403,30 @@ export default {
 
 .service-company-image {
   margin-top: 20px;
-  width: 200px;
-  height: 50px;
-  max-width: 150px;
-  max-height: 100px;
+  width: 80%;
+  max-width: 200px;
+  max-height: 150px;
 }
 
 @media (max-width: 1060px) {
-  .service-company-image {
-    width: 100px;
-    height: 25px;
-  }
   .stepper__content {
     padding: 0px !important;
-  }
-}
-
-@media (max-width: 1060px) {
-  .service-company-image {
-    width: 60px;
-    height: 15px;
   }
   .expansion-panel__header {
     padding-left: 0px !important;
     padding-right: 0px !important;
+  }
+}
+
+@media (max-width: 960px) {
+  .service-company-image {
+    width: 80px;
+  }
+}
+
+@media (max-width: 730px) {
+  .service-company-image {
+    width: 60px;
   }
 }
 
