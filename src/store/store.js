@@ -7,6 +7,7 @@ import APICities from '@/services/api/cities'
 import router from '../router'
 import moment from 'moment'
 import companiesList from '@data/companies.json'
+import citiesList from '@data/cities.json'
 
 Vue.use(Vuex)
 const store = new Vuex.Store({
@@ -74,7 +75,8 @@ const store = new Vuex.Store({
     LOAD_CITIES_LIST ({commit}) {
       APICities.getCities().then((response) => {
         if (response.data) {
-          commit('SET_CITIES_LIST', {list: response.data})
+          // Cargar data de prueba
+          commit('SET_CITIES_LIST', {list: citiesList.data})
         }
       }).catch(err => {
         console.log(err)

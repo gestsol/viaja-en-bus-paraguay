@@ -3,12 +3,12 @@
     <v-layout row wrap align-center justify-center>
       <v-flex xs12>
         <h3 class="white--text d-inline-flex" style="text-align: left">
-          Desarrollada por Wit innovación y tecnología spa
+          Desarrollada por Cloudb2b
         </h3>
 
         <h3 class="white--text d-inline-flex">
-          <a class="email" href="mailto:contacto@viajaenbus.cl" target="_blank" rel="noopener noreferrer">
-            Correo: contacto@viajaenbus.cl
+          <a class="email" href="mailto:nmancuello@cloudb2b.com.py" target="_blank" rel="noopener noreferrer">
+            Correo: nmancuello@cloudb2b.com.py
           </a>
         </h3>
       </v-flex>
