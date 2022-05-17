@@ -170,7 +170,7 @@ export default {
         medioDePago: 'WBPAY',
         puntoVenta: 'VEB',
         montoTotal: this.totalAmount,
-        idSistema: 2,
+        idSistema: 1,
         codigoPais: '+569',
         numeroTelefono: this.movil != null ? this.movil : '+569'
       }
