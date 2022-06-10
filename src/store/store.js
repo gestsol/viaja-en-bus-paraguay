@@ -88,7 +88,7 @@ const store = new Vuex.Store({
         toDate,
         fromCity,
         toCity} = payload
-      if (fromDate == null || fromDate === '') {
+      if (fromDate == null || fromDate === '' ) {
         Vue.notify({
           group: 'error',
           title: this.$translate('services'),
@@ -101,7 +101,9 @@ const store = new Vuex.Store({
       }
       const requestGoing = APIService.get({
         origen: fromCity.codigo,
+        // origen: fromCity.codPais, // Dato de la api
         destino: toCity.codigo,
+        // destino: toCity.codPais, // Dato de la api
         fecha: fromDate.replace(/-/g, ''),
         hora: '0000',
         // idSistema: 2
@@ -111,7 +113,9 @@ const store = new Vuex.Store({
       if (toDate != null) {
         requestReturn = APIService.get({
           origen: toCity.codigo,
+          // origen: toCity.codPais, // Dato de la api
           destino: fromCity.codigo,
+          // destino: fromCity.codPais, // Dato de la api
           fecha: toDate.replace(/-/g, ''),
           hora: '0000',
           // idSistema: 2
@@ -193,6 +197,9 @@ const store = new Vuex.Store({
         dispatch('SET_LOADING_SERVICE', {loading: false})
       })
     },
+
+
+    
     SET_LOADING_SERVICE ({commit}, payload) {
       commit('SET_LOADING_SERVICE', {loading: payload.loading})
     },

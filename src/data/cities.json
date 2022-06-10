@@ -1,14 +1,219 @@
+
 {
-  "data": [
-    {
-      "nombre": "ASUNCION - PARAGUAY",
-      "codigo": "13101420",
-      "region": null
+    "data": [
+      {
+        "codPais": 1,
+        "codigo-NoEsDelApi": "No es propio",
+        "codigo": "13101420",
+        "nomPais": "PARAGUAY",
+        "abrevPais": "PY",
+        "gmt": -3,
+        "codAduanero": 221,
+        "codPaisWu": "PY",
+        "preguntaWu": null,
+        "nomPaisUif": "PARAGUAY",
+        "pasaje": "S"
     },
     {
-      "nombre": "CIUDAD DEL ESTE",
-      "codigo": "02101007",
-      "region": null
+        "codPais": 2,
+        "codigo-NoEsDelApi": "No es propio",
+        "codigo": "02101007",
+        "nomPais": "ARGENTINA",
+        "abrevPais": "AR",
+        "gmt": -3,
+        "codAduanero": 200,
+        "codPaisWu": "AR",
+        "preguntaWu": null,
+        "nomPaisUif": "ARGENTINA",
+        "pasaje": "S"
+    },
+    {
+        "codPais": 3,
+        "nomPais": "CHILE",
+        "abrevPais": "CH",
+        "gmt": -3,
+        "codAduanero": 208,
+        "codPaisWu": "CL",
+        "preguntaWu": null,
+        "nomPaisUif": "CHILE",
+        "pasaje": "N"
+    },
+    {
+        "codPais": 4,
+        "nomPais": "URUGUAY",
+        "abrevPais": "UR",
+        "gmt": -3,
+        "codAduanero": 225,
+        "codPaisWu": "UY",
+        "preguntaWu": null,
+        "nomPaisUif": "URUGUAY",
+        "pasaje": "N"
+    },
+    {
+        "codPais": 5,
+        "nomPais": "BRASIL",
+        "abrevPais": "BR",
+        "gmt": -3,
+        "codAduanero": 203,
+        "codPaisWu": "BR",
+        "preguntaWu": null,
+        "nomPaisUif": "BRASIL",
+        "pasaje": "S"
+    },
+    {
+        "codPais": 6,
+        "nomPais": "PERU",
+        "abrevPais": "PR",
+        "gmt": -3,
+        "codAduanero": null,
+        "codPaisWu": "PE",
+        "preguntaWu": null,
+        "nomPaisUif": "PERÚ",
+        "pasaje": "N"
+    },
+    {
+        "codPais": 7,
+        "nomPais": "ECUADOR",
+        "abrevPais": "EC",
+        "gmt": -3,
+        "codAduanero": 210,
+        "codPaisWu": "EC",
+        "preguntaWu": null,
+        "nomPaisUif": "ECUADOR",
+        "pasaje": "N"
+    },
+    {
+        "codPais": 8,
+        "nomPais": "COLOMBIA",
+        "abrevPais": "CO",
+        "gmt": -3,
+        "codAduanero": 205,
+        "codPaisWu": "CO",
+        "preguntaWu": null,
+        "nomPaisUif": "COLOMBIA",
+        "pasaje": "N"
+    },
+    {
+        "codPais": 9,
+        "nomPais": "CANADA",
+        "abrevPais": "CA",
+        "gmt": -3,
+        "codAduanero": 204,
+        "codPaisWu": "CA",
+        "preguntaWu": null,
+        "nomPaisUif": "CANADA",
+        "pasaje": "N"
+    },
+    {
+        "codPais": 10,
+        "nomPais": "MEXICO",
+        "abrevPais": "ME",
+        "gmt": -3,
+        "codAduanero": 218,
+        "codPaisWu": "MX",
+        "preguntaWu": null,
+        "nomPaisUif": "MEXICO",
+        "pasaje": "N"
+    },
+    {
+        "codPais": 11,
+        "nomPais": "ESTADOS UNIDOS",
+        "abrevPais": "EU",
+        "gmt": -3,
+        "codAduanero": 212,
+        "codPaisWu": "US",
+        "preguntaWu": null,
+        "nomPaisUif": "ESTADOS UNIDOS",
+        "pasaje": "N"
+    },
+    {
+        "codPais": 12,
+        "nomPais": "VARIOS",
+        "abrevPais": "VA",
+        "gmt": -3,
+        "codAduanero": null,
+        "codPaisWu": null,
+        "preguntaWu": null,
+        "nomPaisUif": "VARIOS",
+        "pasaje": "N"
+    },
+    {
+        "codPais": 13,
+        "nomPais": "SUIZA",
+        "abrevPais": "SU",
+        "gmt": -6,
+        "codAduanero": null,
+        "codPaisWu": "CH",
+        "preguntaWu": null,
+        "nomPaisUif": "SUIZA",
+        "pasaje": "N"
+    },
+    {
+        "codPais": 14,
+        "nomPais": "BOLIVIA",
+        "abrevPais": "BO",
+        "gmt": -3,
+        "codAduanero": 202,
+        "codPaisWu": "BO",
+        "preguntaWu": null,
+        "nomPaisUif": "BOLIVIA",
+        "pasaje": "N"
+    },
+    {
+        "codPais": 15,
+        "nomPais": "ITALIA",
+        "abrevPais": "IT",
+        "gmt": -6,
+        "codAduanero": 417,
+        "codPaisWu": "IT",
+        "preguntaWu": null,
+        "nomPaisUif": "ITALIA",
+        "pasaje": "N"
+    },
+    {
+        "codPais": 16,
+        "nomPais": "CHINA",
+        "abrevPais": "CN",
+        "gmt": -12,
+        "codAduanero": 310,
+        "codPaisWu": "CN",
+        "preguntaWu": null,
+        "nomPaisUif": "CHINA",
+        "pasaje": "N"
+    },
+    {
+        "codPais": 18,
+        "nomPais": "ASIA IND",
+        "abrevPais": "AI",
+        "gmt": -12,
+        "codAduanero": 398,
+        "codPaisWu": null,
+        "preguntaWu": null,
+        "nomPaisUif": "ASIA IND",
+        "pasaje": "N"
+    },
+    {
+        "codPais": 19,
+        "nomPais": "AMERICA IND.",
+        "abrevPais": "MI",
+        "gmt": -1,
+        "codAduanero": 298,
+        "codPaisWu": null,
+        "preguntaWu": null,
+        "nomPaisUif": "AMERICA IND.",
+        "pasaje": "N"
+    },
+    {
+        "codPais": 20,
+        "nomPais": "EUROPA IND.",
+        "abrevPais": "EI",
+        "gmt": -6,
+        "codAduanero": 498,
+        "codPaisWu": null,
+        "preguntaWu": null,
+        "nomPaisUif": "EUROPA IND.",
+        "pasaje": "N"
     }
-  ]
-}
+    ]
+  }
+  
