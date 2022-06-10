@@ -3,17 +3,20 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
 import APIService from '@/services/api/services'
-import APICities from '@/services/api/cities'
+// import APICities from '@/services/api/cities'
 import router from '../router'
 import moment from 'moment'
 import companiesList from '@data/companies.json'
-import citiesList from '@data/cities.json'
+// import citiesList from '@data/cities.json'
+import nsaEndPoints from '../nsaEndpoints'
 
 Vue.use(Vuex)
 const store = new Vuex.Store({
-  plugins: [createPersistedState({
-    paths: ['language', 'searching', 'cities', 'seats', 'step', 'payment_info', 'userData']
-  })],
+  plugins: [
+    createPersistedState({
+      paths: ['language', 'searching', 'cities', 'seats', 'step', 'payment_info', 'userData']
+    })
+  ],
 
   state: {
     language: 'es',
@@ -48,7 +51,7 @@ const store = new Vuex.Store({
     selected: false,
     grid: [],
     seats: [],
-    step:1,
+    step: 1,
     payment_info: {
       name: '',
       rut: '',
@@ -72,23 +75,28 @@ const store = new Vuex.Store({
   },
 
   actions: {
-    LOAD_CITIES_LIST ({commit}) {
-      APICities.getCities().then((response) => {
-        if (response.data) {
-          // Cargar data de prueba
-          commit('SET_CITIES_LIST', {list: citiesList.data})
-        }
-      }).catch(err => {
-        console.log(err)
-      })
+    async LOAD_CITIES_LIST({ commit }) {
+      try {
+        const res = await (await fetch(`${nsaEndPoints.listaPaises}`)).json()
+        // console.log(nsaEndPoints.listaPaises)
+        commit('SET_CITIES_LIST', { list: res })
+      } catch (error) {
+        console.log(error)
+      }
+
+      /* APICities.getCities().then((response) => {
+         if (response) {
+           commit('SET_CITIES_LIST', {list: getCities})
+         }
+       }).catch(err => {
+         console.log(err)
+        })
+      */ 
     },
 
-    LOAD_SERVICES_LIST ({commit, dispatch}, payload) {
-      const {fromDate,
-        toDate,
-        fromCity,
-        toCity} = payload
-      if (fromDate == null || fromDate === '' ) {
+    LOAD_SERVICES_LIST({ commit, dispatch }, payload) {
+      const { fromDate, toDate, fromCity, toCity } = payload
+      if (fromDate == null || fromDate === '') {
         Vue.notify({
           group: 'error',
           title: this.$translate('services'),
@@ -96,7 +104,7 @@ const store = new Vuex.Store({
           text: this.$translate('no_going_date')
         })
         Vue.notify({ group: 'stuck-load', clean: true })
-        dispatch('SET_LOADING_SERVICE', {loading: false})
+        dispatch('SET_LOADING_SERVICE', { loading: false })
         return
       }
       const requestGoing = APIService.get({
@@ -122,244 +130,240 @@ const store = new Vuex.Store({
           idSistema: 1
         })
       }
-      dispatch('SET_LOADING_SERVICE', {loading: true})
+      dispatch('SET_LOADING_SERVICE', { loading: true })
       Promise.all([requestGoing, requestReturn])
-      .then(responses => {
-        console.log('responses', responses)
-        const data = responses[0].data
-          .map(item => {
+        .then(responses => {
+          console.log('responses', responses)
+          const data = responses[0].data.map(item => {
             item.vuelta = false
             return item
           })
-        let dataReturn = []
-        console.log('first', data)
-        if (responses[1]) {
-          dataReturn = responses[1].data
-            .map(item => {
+          let dataReturn = []
+          console.log('first', data)
+          if (responses[1]) {
+            dataReturn = responses[1].data.map(item => {
               item.vuelta = true
               return item
             })
-          console.log('second', dataReturn)
-        }
-        const resultData = data.concat(dataReturn)
-        if (resultData.length <= 0) {
-          Vue.notify({
-            group: 'error',
-            title: this.$translate('services'),
-            type: 'error',
-            text: this.$translate('no_av_services')
-          })
-          commit('SET_SERVICES_LIST', {list: []})
-          dispatch('SET_USER_FILTER', {filter: [], type: 'companies'})
-          dispatch('SET_USER_FILTER', {filter: [], type: 'class'})
-          return
-        }
-        if (payload.goTo) {
-          router.push('/services')
-        }
-        if (resultData) {
-          commit('SET_SERVICES_LIST', {list: resultData})
-          const companies = []
-          const classes = []
-          resultData.forEach(item => {
-            if (companies.length < 1) {
-              companies.push(item.empresa)
-            } else if (companies.filter(company => company === item.empresa).length < 1) {
-              companies.push(item.empresa)
-            }
-            const firstService = item.servicioPrimerPiso
-            const secondService = item.servicioSegundoPiso
-            if (classes.length < 1) {
-              classes.push(firstService)
-              if (firstService !== secondService && secondService !== null) {
-                classes.push(secondService)
+            console.log('second', dataReturn)
+          }
+          const resultData = data.concat(dataReturn)
+          if (resultData.length <= 0) {
+            Vue.notify({
+              group: 'error',
+              title: this.$translate('services'),
+              type: 'error',
+              text: this.$translate('no_av_services')
+            })
+            commit('SET_SERVICES_LIST', { list: [] })
+            dispatch('SET_USER_FILTER', { filter: [], type: 'companies' })
+            dispatch('SET_USER_FILTER', { filter: [], type: 'class' })
+            return
+          }
+          if (payload.goTo) {
+            router.push('/services')
+          }
+          if (resultData) {
+            commit('SET_SERVICES_LIST', { list: resultData })
+            const companies = []
+            const classes = []
+            resultData.forEach(item => {
+              if (companies.length < 1) {
+                companies.push(item.empresa)
+              } else if (companies.filter(company => company === item.empresa).length < 1) {
+                companies.push(item.empresa)
               }
-            } else {
-              if (classes.filter(clas => clas === firstService).length < 1) {
+              const firstService = item.servicioPrimerPiso
+              const secondService = item.servicioSegundoPiso
+              if (classes.length < 1) {
                 classes.push(firstService)
+                if (firstService !== secondService && secondService !== null) {
+                  classes.push(secondService)
+                }
+              } else {
+                if (classes.filter(clas => clas === firstService).length < 1) {
+                  classes.push(firstService)
+                }
+                if (secondService !== null && classes.filter(clas => clas === secondService).length < 1) {
+                  classes.push(secondService)
+                }
               }
-              if (secondService !== null && classes.filter(clas => clas === secondService).length < 1) {
-                classes.push(secondService)
-              }
-            }
-          })
-          classes.push('Todos')
-          companies.push('Todos')
-          dispatch('SET_USER_FILTER', {filter: companies, type: 'companies'})
-          dispatch('SET_USER_FILTER', {filter: classes, type: 'class'})
-          dispatch('SET_USER_FILTER', {filter: 'Todos', type: 'selectedCompany'})
-          dispatch('SET_USER_FILTER', {filter: 'Todos', type: 'selectedClass'})
-        }
-      })
-      .catch(err => console.log(err))
-      .finally(() => {
-        Vue.notify({ group: 'stuck-load', clean: true })
-        dispatch('SET_LOADING_SERVICE', {loading: false})
-      })
+            })
+            classes.push('Todos')
+            companies.push('Todos')
+            dispatch('SET_USER_FILTER', { filter: companies, type: 'companies' })
+            dispatch('SET_USER_FILTER', { filter: classes, type: 'class' })
+            dispatch('SET_USER_FILTER', { filter: 'Todos', type: 'selectedCompany' })
+            dispatch('SET_USER_FILTER', { filter: 'Todos', type: 'selectedClass' })
+          }
+        })
+        .catch(err => console.log(err))
+        .finally(() => {
+          Vue.notify({ group: 'stuck-load', clean: true })
+          dispatch('SET_LOADING_SERVICE', { loading: false })
+        })
     },
 
-
-    
-    SET_LOADING_SERVICE ({commit}, payload) {
-      commit('SET_LOADING_SERVICE', {loading: payload.loading})
+    SET_LOADING_SERVICE({ commit }, payload) {
+      commit('SET_LOADING_SERVICE', { loading: payload.loading })
     },
-    SELECTED_SERVICE ({commit}, payload) {
-      commit('SELECT_SERVICE', {selected: payload.selected})
+    SELECTED_SERVICE({ commit }, payload) {
+      commit('SELECT_SERVICE', { selected: payload.selected })
     },
-    SET_SERVICE_TAB ({commit}, payload) {
-      commit('SET_SERVICE_TAB', {tab: payload.tab})
+    SET_SERVICE_TAB({ commit }, payload) {
+      commit('SET_SERVICE_TAB', { tab: payload.tab })
     },
-    SET_NEW_USER_SEARCHING_CITY ({commit}, payload) {
+    SET_NEW_USER_SEARCHING_CITY({ commit }, payload) {
       if (payload.direction === 'from') {
-        commit('SET_USER_SEARCHING_FROM_CITY', {city: payload.city})
+        commit('SET_USER_SEARCHING_FROM_CITY', { city: payload.city })
       } else {
-        commit('SET_USER_SEARCHING_TO_CITY', {city: payload.city})
+        commit('SET_USER_SEARCHING_TO_CITY', { city: payload.city })
       }
     },
 
-    SET_NEW_USER_SEARCHING_DATE ({commit}, payload) {
+    SET_NEW_USER_SEARCHING_DATE({ commit }, payload) {
       if (payload.direction === 'from') {
-        commit('SET_USER_SEARCHING_FROM_DATE', {date: payload.date})
+        commit('SET_USER_SEARCHING_FROM_DATE', { date: payload.date })
       } else {
-        commit('SET_USER_SEARCHING_TO_DATE', {date: payload.date})
+        commit('SET_USER_SEARCHING_TO_DATE', { date: payload.date })
       }
     },
 
-    SET_USER_FILTER ({commit}, payload) {
-      if (payload.type === 'class') commit('SET_CLASS_FILTER', {filter: payload.filter})
-      if (payload.type === 'selectedClass') commit('SET_SELECTED_CLASS_FILTER', {filter: payload.filter})
-      if (payload.type === 'companies') commit('SET_COMPANIE_FILTER', {filter: payload.filter})
-      if (payload.type === 'selectedCompany') commit('SET_SELECTED_COMPANY_FILTER', {filter: payload.filter})
-      if (payload.type === 'prices') commit('SET_PRICE_FILTER', {filter: payload.filter})
-      if (payload.type === 'hours') commit('SET_HOUR_FILTER', {filter: payload.filter})
+    SET_USER_FILTER({ commit }, payload) {
+      if (payload.type === 'class') commit('SET_CLASS_FILTER', { filter: payload.filter })
+      if (payload.type === 'selectedClass') commit('SET_SELECTED_CLASS_FILTER', { filter: payload.filter })
+      if (payload.type === 'companies') commit('SET_COMPANIE_FILTER', { filter: payload.filter })
+      if (payload.type === 'selectedCompany') commit('SET_SELECTED_COMPANY_FILTER', { filter: payload.filter })
+      if (payload.type === 'prices') commit('SET_PRICE_FILTER', { filter: payload.filter })
+      if (payload.type === 'hours') commit('SET_HOUR_FILTER', { filter: payload.filter })
     },
 
-    SET_USER_LANGUAGE ({commit}, payload) {
-      commit('SET_LANGUAGE', {language: payload.language})
+    SET_USER_LANGUAGE({ commit }, payload) {
+      commit('SET_LANGUAGE', { language: payload.language })
     },
-    SET_STEP ({commit}, payload) {
-      commit('SET_STEP', {step: payload.step})
-    },
-
-    SELECT ({commit}, payload) {
-      commit('SELECT_SERVICE', {selected: payload.selected})
-    },
-    SHOW_RESUME: ({commit}, payload) => {
-      commit('SHOW_RESUME', {showResume: payload.showResume})
-    },
-    SET_GRID ({commit}, payload) {
-      commit('SET_GRID', {grid: payload.grid})
+    SET_STEP({ commit }, payload) {
+      commit('SET_STEP', { step: payload.step })
     },
 
-    SET_SEAT ({commit, getters}, payload) {
+    SELECT({ commit }, payload) {
+      commit('SELECT_SERVICE', { selected: payload.selected })
+    },
+    SHOW_RESUME: ({ commit }, payload) => {
+      commit('SHOW_RESUME', { showResume: payload.showResume })
+    },
+    SET_GRID({ commit }, payload) {
+      commit('SET_GRID', { grid: payload.grid })
+    },
+
+    SET_SEAT({ commit, getters }, payload) {
       if (getters.seatsByTravel(payload.seat.vuelta).length < 4) {
-        commit('SET_SEAT', {seat: payload.seat})
+        commit('SET_SEAT', { seat: payload.seat })
       }
     },
 
-    DELETE_SEAT ({commit}, payload) {
-      commit('DELETE_SEAT', {seat: payload.seat})
+    DELETE_SEAT({ commit }, payload) {
+      commit('DELETE_SEAT', { seat: payload.seat })
     },
 
-    DELETE_ALL_SEAT: ({commit}) => {
+    DELETE_ALL_SEAT: ({ commit }) => {
       commit('DELETE_ALL_SEAT', {})
     },
 
-    SET_PAYMENT_INFO ({commit}, payload) {
-      commit('SET_PAYMENT_INFO', {payment_info: payload.payment_info})
+    SET_PAYMENT_INFO({ commit }, payload) {
+      commit('SET_PAYMENT_INFO', { payment_info: payload.payment_info })
     },
 
-    SET_USER ({commit}, payload) {
-      commit('SET_USER', {userData: payload.userData})
+    SET_USER({ commit }, payload) {
+      commit('SET_USER', { userData: payload.userData })
     },
 
-    DELETE_USER ({commit}) {
+    DELETE_USER({ commit }) {
       commit('DELETE_USER')
     },
 
-    SET_HISTORY({commit}, payload) {
-      commit('SET_HISTORY', {from: payload.from, to: payload.to})
+    SET_HISTORY({ commit }, payload) {
+      commit('SET_HISTORY', { from: payload.from, to: payload.to })
     }
   },
 
   mutations: {
-    SET_CITIES_LIST: (state, {list}) => {
+    SET_CITIES_LIST: (state, { list }) => {
       state.cities = list
     },
-    SET_SERVICES_LIST: (state, {list}) => {
+    SET_SERVICES_LIST: (state, { list }) => {
       state.services.data = list
     },
-    SET_LOADING_SERVICE: (state, {loading}) => {
+    SET_LOADING_SERVICE: (state, { loading }) => {
       state.services.loading = loading
     },
-    SET_USER_SEARCHING_FROM_CITY: (state, {city}) => {
+    SET_USER_SEARCHING_FROM_CITY: (state, { city }) => {
       state.searching.from_city = city
     },
-    SET_USER_SEARCHING_TO_CITY: (state, {city}) => {
+    SET_USER_SEARCHING_TO_CITY: (state, { city }) => {
       state.searching.to_city = city
     },
-    SET_USER_SEARCHING_FROM_DATE: (state, {date}) => {
+    SET_USER_SEARCHING_FROM_DATE: (state, { date }) => {
       const diff = moment(state.searching.to_date).diff(state.searching.from_date)
       if (diff > -1) {
         state.searching.to_date = null
       }
       state.searching.from_date = date
     },
-    SET_USER_SEARCHING_TO_DATE: (state, {date}) => {
+    SET_USER_SEARCHING_TO_DATE: (state, { date }) => {
       state.searching.to_date = date
     },
-    SET_CLASS_FILTER: (state, {filter}) => {
+    SET_CLASS_FILTER: (state, { filter }) => {
       state.serviceFilters.class = filter
     },
-    SET_SELECTED_CLASS_FILTER: (state, {filter}) => {
+    SET_SELECTED_CLASS_FILTER: (state, { filter }) => {
       state.serviceFilters.selectedClass = filter
     },
-    SET_COMPANIE_FILTER: (state, {filter}) => {
+    SET_COMPANIE_FILTER: (state, { filter }) => {
       state.serviceFilters.companies = filter
     },
-    SET_SELECTED_COMPANY_FILTER: (state, {filter}) => {
+    SET_SELECTED_COMPANY_FILTER: (state, { filter }) => {
       state.serviceFilters.selectedCompany = filter
     },
-    SET_PRICE_FILTER: (state, {filter}) => {
+    SET_PRICE_FILTER: (state, { filter }) => {
       state.serviceFilters.prices = filter
     },
-    SET_HOUR_FILTER: (state, {filter}) => {
+    SET_HOUR_FILTER: (state, { filter }) => {
       state.serviceFilters.hours = filter
     },
-    SET_LANGUAGE: (state, {language}) => {
+    SET_LANGUAGE: (state, { language }) => {
       state.language = language
     },
-    SET_STEP: (state, {step}) => {
+    SET_STEP: (state, { step }) => {
       state.step = step
     },
-    SELECT_SERVICE: (state, {selected}) => {
+    SELECT_SERVICE: (state, { selected }) => {
       state.services.selected = selected
     },
-    SET_SERVICE_TAB: (state, {tab}) => {
+    SET_SERVICE_TAB: (state, { tab }) => {
       state.services.tab = tab
     },
-    SHOW_RESUME: (state, {showResume}) => {
+    SHOW_RESUME: (state, { showResume }) => {
       state.services.showResume = showResume
     },
-    SET_GRID: (state, {grid}) => {
+    SET_GRID: (state, { grid }) => {
       state.grid = grid
     },
-    SET_SEAT: (state, {seat}) => {
+    SET_SEAT: (state, { seat }) => {
       state.seats.push(seat)
     },
-    DELETE_SEAT: (state, {seat}) => {
+    DELETE_SEAT: (state, { seat }) => {
       state.seats.splice(seat, 1)
     },
-    DELETE_ALL_SEAT: (state) => {
+    DELETE_ALL_SEAT: state => {
       state.seats = []
     },
-    SET_PAYMENT_INFO (state, {payment_info}) {
+    SET_PAYMENT_INFO(state, { payment_info }) {
       state.payment_info = payment_info
     },
-    SET_USER (state, {userData}) {
+    SET_USER(state, { userData }) {
       state.userData = userData
     },
-    DELETE_USER (state) {
+    DELETE_USER(state) {
       const userData = {
         cambiaClave: false,
         payment_info: {},
@@ -389,43 +393,43 @@ const store = new Vuex.Store({
     },
     getServiceFiltered: state => {
       const serviceFilters = state.serviceFilters
-      const servicesByCompany = state.services.data.filter((service) => {
+      const servicesByCompany = state.services.data.filter(service => {
         let filter = true
         if (serviceFilters.selectedCompany !== 'Todos') {
           filter = service.empresa === serviceFilters.selectedCompany
         }
         const timeSplited = service.horaSalida.split(':')
-        const hours = parseInt(timeSplited[0]*60)
+        const hours = parseInt(timeSplited[0] * 60)
         const minutes = parseInt(timeSplited[1])
         const timeToCompare = hours + minutes
-        filter = (timeToCompare >= serviceFilters.hours.min && timeToCompare <= serviceFilters.hours.max) && filter
-        const {searching} = state
+        filter = timeToCompare >= serviceFilters.hours.min && timeToCompare <= serviceFilters.hours.max && filter
+        const { searching } = state
         // if (searching.to_date != null) {
         //   const date = moment(service.fechaLlegada, 'DD-MM-YYYY').format().split(':')[0].split('T')[0]
         //   filter = (searching.to_date === date) && filter
         // }
         return filter
       })
-      const servicesByPrice = servicesByCompany.map((service) => {
+      const servicesByPrice = servicesByCompany.map(service => {
         const tarifa1 = parseInt(service.tarifaPrimerPisoInternet.split('.').join(''))
-        let filter1 = (tarifa1 >= serviceFilters.prices.min && tarifa1 <= serviceFilters.prices.max)
+        let filter1 = tarifa1 >= serviceFilters.prices.min && tarifa1 <= serviceFilters.prices.max
         if (serviceFilters.selectedClass !== 'Todos') {
           filter1 = service.servicioPrimerPiso === serviceFilters.selectedClass && filter1
         }
-        let newItem = {...service, filter1}
+        let newItem = { ...service, filter1 }
         if (service.busPiso2 != null) {
           const tarifa2 = parseInt(service.tarifaSegundoPisoInternet.split('.').join(''))
-          let filter2 = (tarifa2 >= serviceFilters.prices.min && tarifa2 <= serviceFilters.prices.max)
+          let filter2 = tarifa2 >= serviceFilters.prices.min && tarifa2 <= serviceFilters.prices.max
           if (serviceFilters.selectedClass !== 'Todos') {
             filter2 = service.servicioSegundoPiso === serviceFilters.selectedClass && filter2
           }
-          newItem = {...newItem, filter2}
+          newItem = { ...newItem, filter2 }
         }
         return newItem
       })
       return servicesByPrice
     },
-    getServiceList: (state, getters) => (vuelta) => {
+    getServiceList: (state, getters) => vuelta => {
       let servicesTemp = []
       let services = []
       getters.getServiceFiltered.forEach(item => {
@@ -480,17 +484,17 @@ const store = new Vuex.Store({
           pisos.push(pisoDos)
         }
         if (pisos.length > 0) {
-          servicesTemp.push({...Object.assign({}, item), pisos})
+          servicesTemp.push({ ...Object.assign({}, item), pisos })
         }
       })
       // Obteniendo keys
       servicesTemp.forEach(item => {
         if (services.length < 1) {
-          services.push({id: item.empresa, data: []})
+          services.push({ id: item.empresa, data: [] })
         } else {
           const elements = services.filter(service => service.id === item.empresa)
           if (elements.length < 1) {
-            services.push({id: item.empresa, data: []})
+            services.push({ id: item.empresa, data: [] })
           }
         }
       })
@@ -498,7 +502,7 @@ const store = new Vuex.Store({
       services.map(item => {
         for (let service of servicesTemp) {
           if (service.empresa === item.id) {
-            item.data.push({id: service.idServicio + service.idTerminalOrigen, ...service})
+            item.data.push({ id: service.idServicio + service.idTerminalOrigen, ...service })
           }
         }
         return item
@@ -542,11 +546,11 @@ const store = new Vuex.Store({
     },
 
     selected: state => {
-     return state.selected
+      return state.selected
     },
 
     show_resume: state => {
-     return state.services.showResume
+      return state.services.showResume
     },
 
     grid: state => {
@@ -557,14 +561,14 @@ const store = new Vuex.Store({
       return state.seats
     },
 
-    hasVuelta (state, getters) {
+    hasVuelta(state, getters) {
       const services = getters.getServiceList(true)
       return services.length > 0
     },
-    getServicesTab (state) {
+    getServicesTab(state) {
       return state.services.tab
     },
-    seatsByTravel: state => (vuelta) => {
+    seatsByTravel: state => vuelta => {
       return state.seats.filter(item => {
         return item.vuelta === vuelta
       })
@@ -583,11 +587,11 @@ const store = new Vuex.Store({
 
     getHistory: state => {
       return state.history
-    },
+    }
   }
 })
 
-export function addStoreProperty (name, property) {
+export function addStoreProperty(name, property) {
   store[name] = property
 }
 

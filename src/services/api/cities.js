@@ -5,7 +5,7 @@ const cities = endPoints.cities
 
 export default {
   getCities () {
-    return axios.post(cities)
+    return axios.get(cities)
   },
   getCityByCode (code) {
     return axios.post(cities, code)
