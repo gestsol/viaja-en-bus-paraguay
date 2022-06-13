@@ -2,7 +2,7 @@
   <div>
     <!-- item para el seleccionado -->
     <v-select class="body-1" dark :label="languageChange" :items="cities" color="grey lighten-4" item-text="nombreCiudad"
-      item-value="codPais" bottom return-object persistent-hint clearable autocomplete v-model="userCity">
+      item-value="codCiudad" bottom return-object persistent-hint clearable autocomplete v-model="userCity">
       <template slot="item" slot-scope="data">
         <template v-if="typeof data.item !== 'object'">
           <v-list-tile-content v-text="data.item"></v-list-tile-content>
