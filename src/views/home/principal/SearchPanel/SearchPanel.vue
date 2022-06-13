@@ -9,12 +9,27 @@
           </v-flex>
 
           <v-flex xs12 md6 class='pl-3 pr-3'>
-            <cities-list v-model="fromCity" ref='from_search' direction="from"/>
+            <countries-list v-model="fromCountry" ref='from_search' direction="from"/>
+          </v-flex>
+
+          <v-flex xs12 md6 class='pl-3 pr-3'>
+            <countries-list v-model="toCountry" direction="to"/>
+          </v-flex>
+
+          
+
+            
+            <v-flex xs12 md6 class='pl-3 pr-3'>
+              <cities-list v-model="fromCity" ref='from_search' direction="from"/>
           </v-flex>
 
           <v-flex xs12 md6 class='pl-3 pr-3'>
             <cities-list v-model="toCity" direction="to"/>
           </v-flex>
+
+
+          
+
 
           <v-flex xs12 md6 class='pl-3 pr-3'>
             <calendar v-model="fromDate" ref='to_search' direction='from'/>
@@ -36,6 +51,7 @@
 </template>
 
 <script>
+import CountriesList from './Countries'
 import CitiesList from './Cities'
 import Calendar from './Calendar'
 import { mapGetters } from 'vuex'
@@ -43,6 +59,7 @@ import moment from 'moment'
 
 export default {
   components: {
+    CountriesList,
     CitiesList,
     Calendar
   },
@@ -50,6 +67,8 @@ export default {
     return {
       fromDate: '',
       toDate: '',
+      fromCountry: null,
+      toCountry: null,
       fromCity: null,
       toCity: null
     }
@@ -79,6 +98,8 @@ export default {
         goTo: true,
         fromDate: this.fromDate,
         toDate: this.toDate,
+        fromCountry: this.fromCountry,
+        toCountry: this.toCountry,
         fromCity: this.fromCity,
         toCity: this.toCity
       })
@@ -90,6 +111,14 @@ export default {
       })
       this.$store.dispatch('SET_NEW_USER_SEARCHING_DATE', {
         date: this.toDate,
+        direction: 'to'
+      })
+      this.$store.dispatch('SET_NEW_USER_SEARCHING_COUNTRY', {
+        country: this.fromCountry,
+        direction: 'from'
+      })
+      this.$store.dispatch('SET_NEW_USER_SEARCHING_COUNTRY', {
+        country: this.toCountry,
         direction: 'to'
       })
       this.$store.dispatch('SET_NEW_USER_SEARCHING_CITY', {
@@ -108,9 +137,14 @@ export default {
   }),
 
   mounted () {
+    this.$store.dispatch('LOAD_COUNTRIES_LIST')
     this.$store.dispatch('LOAD_CITIES_LIST')
     this.fromDate = this.$store.state.searching.from_date
     this.toDate = this.$store.state.searching.to_date
+//
+    this.fromCountry = this.$store.state.searching.from_country
+    this.toCountry = this.$store.state.searching.to_country
+//
     this.fromCity = this.$store.state.searching.from_city
     this.toCity = this.$store.state.searching.to_city
   }

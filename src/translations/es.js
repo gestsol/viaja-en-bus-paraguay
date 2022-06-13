@@ -42,6 +42,8 @@ let es = () => {
     blog: 'Blog',
     totems: 'Totems',
     our_partnes: 'Nuestros partners',
+    from_country: 'País de partida',
+    to_country: 'País destino',
     from_city: '¿Dónde se inicia tu viaje?',
     to_city: '¿Dónde quieres ir?',
     from_date: 'Fecha de salida',

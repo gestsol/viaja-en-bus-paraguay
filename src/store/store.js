@@ -14,14 +14,17 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   plugins: [
     createPersistedState({
-      paths: ['language', 'searching', 'cities', 'seats', 'step', 'payment_info', 'userData']
+      paths: ['language', 'searching','countries', 'cities', 'seats', 'step', 'payment_info', 'userData']
     })
   ],
 
   state: {
     language: 'es',
+    countries: [],
     cities: [],
     searching: {
+      from_country: null,
+      to_country: null,
       from_city: null,
       to_city: null,
       from_date: null,
@@ -75,11 +78,12 @@ const store = new Vuex.Store({
   },
 
   actions: {
-    async LOAD_CITIES_LIST({ commit }) {
+    //
+    async LOAD_COUNTRIES_LIST({ commit }) {
       try {
         const res = await (await fetch(`${nsaEndPoints.listaPaises}`)).json()
         // console.log(nsaEndPoints.listaPaises)
-        commit('SET_CITIES_LIST', { list: res })
+        commit('SET_COUNTRIES_LIST', { list: res })
       } catch (error) {
         console.log(error)
       }
@@ -93,6 +97,20 @@ const store = new Vuex.Store({
         })
       */ 
     },
+    //
+
+    
+    async LOAD_CITIES_LIST({ commit }) {
+      try {
+        const res = await (await fetch(`${nsaEndPoints.ciudadParadas}`)).json()
+        console.log(nsaEndPoints.ciudadParadas)
+        commit('SET_CITIES_LIST', { list: res })
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
+        
 
     LOAD_SERVICES_LIST({ commit, dispatch }, payload) {
       const { fromDate, toDate, fromCity, toCity } = payload
@@ -213,6 +231,15 @@ const store = new Vuex.Store({
     SET_SERVICE_TAB({ commit }, payload) {
       commit('SET_SERVICE_TAB', { tab: payload.tab })
     },
+    //
+    SET_NEW_USER_SEARCHING_COUNTRY({ commit }, payload) {
+      if (payload.direction === 'from') {
+        commit('SET_USER_SEARCHING_FROM_COUNTRY', { country: payload.country })
+      } else {
+        commit('SET_USER_SEARCHING_TO_COUNTRY', { country: payload.country })
+      }
+    },
+    //
     SET_NEW_USER_SEARCHING_CITY({ commit }, payload) {
       if (payload.direction === 'from') {
         commit('SET_USER_SEARCHING_FROM_CITY', { city: payload.city })
@@ -287,6 +314,11 @@ const store = new Vuex.Store({
   },
 
   mutations: {
+    //
+    SET_COUNTRIES_LIST: (state, { list }) => {
+      state.countries = list
+    },
+    //
     SET_CITIES_LIST: (state, { list }) => {
       state.cities = list
     },
@@ -296,6 +328,14 @@ const store = new Vuex.Store({
     SET_LOADING_SERVICE: (state, { loading }) => {
       state.services.loading = loading
     },
+    //
+    SET_USER_SEARCHING_FROM_COUNTRY: (state, { city }) => {
+      state.searching.from_country = country
+    },
+    SET_USER_SEARCHING_TO_COUNTRY: (state, { city }) => {
+      state.searching.to_country = country
+    },
+    //
     SET_USER_SEARCHING_FROM_CITY: (state, { city }) => {
       state.searching.from_city = city
     },
@@ -388,6 +428,11 @@ const store = new Vuex.Store({
     getLanguage: state => {
       return state.language
     },
+    //
+    getCountriesList: state => {
+      return state.countries.filter(countries => !countries.completed)
+    },
+    //
     getCitiesList: state => {
       return state.cities.filter(cities => !cities.completed)
     },

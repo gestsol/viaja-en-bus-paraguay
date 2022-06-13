@@ -1,8 +1,8 @@
 <template>
   <div>
     <!-- item para el seleccionado -->
-    <v-select class="body-1" dark :label="languageChange" :items="cities" color="grey lighten-4" item-text="nombreCiudad"
-      item-value="codPais" bottom return-object persistent-hint clearable autocomplete v-model="userCity">
+    <v-select class="body-1" dark :label="languageChange" :items="countries" color="grey lighten-4" item-text="nomPais"
+      item-value="codPais" bottom return-object persistent-hint clearable autocomplete v-model="userCountry">
       <template slot="item" slot-scope="data">
         <template v-if="typeof data.item !== 'object'">
           <v-list-tile-content v-text="data.item"></v-list-tile-content>
@@ -10,7 +10,7 @@
 
         <template v-else>
           <v-list-tile-content>
-            <v-list-tile-title v-html="`${data.item.nombreCiudad}`"></v-list-tile-title>
+            <v-list-tile-title v-html="` ${data.item.abrevPais} - ${data.item.nomPais}`"></v-list-tile-title>
           </v-list-tile-content>
 
         </template>
@@ -23,7 +23,7 @@
 import { mapGetters } from 'vuex'
 
 export default {
-  name: 'CitiesList',
+  name: 'CountriesList',
 
   props: {
     direction: {
@@ -35,10 +35,10 @@ export default {
 
   computed: {
     ...mapGetters({
-      cities: ['getCitiesList']
+      countries: ['getCountriesList']
     }),
 
-    userCity: {
+    userCountry: {
       get() {
         return this.value
       },
@@ -49,7 +49,7 @@ export default {
 
     languageChange() {
       let result = ''
-      result = this.direction === 'from' ? this.translate('from_city') : this.translate('to_city')
+      result = this.direction === 'from' ? this.translate('from_country') : this.translate('to_country')
       return result
     }
   }
