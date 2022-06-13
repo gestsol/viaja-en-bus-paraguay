@@ -100,11 +100,11 @@ const store = new Vuex.Store({
     //
 
     
-    async LOAD_CITIES_LIST({ commit }) {
+    async LOAD_CITIES_LIST({ commit }, filt) {
       try {
         const res = await (await fetch(`${nsaEndPoints.ciudadParadas}`)).json()
-        console.log(nsaEndPoints.ciudadParadas)
-        commit('SET_CITIES_LIST', { list: res })
+        // console.log(nsaEndPoints.ciudadParadas)
+        commit('SET_CITIES_LIST', { list: res.filter(item => item.pais === filt) })
       } catch (error) {
         console.log(error)
       }
@@ -113,7 +113,8 @@ const store = new Vuex.Store({
         
 
     LOAD_SERVICES_LIST({ commit, dispatch }, payload) {
-      const { fromDate, toDate, fromCity, toCity } = payload
+      // added country to the payload
+      const { fromDate, toDate, fromCity, toCity, fromCountry, toCountry } = payload
       if (fromDate == null || fromDate === '') {
         Vue.notify({
           group: 'error',
@@ -126,10 +127,10 @@ const store = new Vuex.Store({
         return
       }
       const requestGoing = APIService.get({
-        origen: fromCity.codigo,
-        // origen: fromCity.codPais, // Dato de la api
-        destino: toCity.codigo,
-        // destino: toCity.codPais, // Dato de la api
+        // origen: fromCity.codigo, // Original
+        origen: fromCountry.codPais, 
+        // destino: toCity.codigo, // Original
+        destino: toCountry.codPais, 
         fecha: fromDate.replace(/-/g, ''),
         hora: '0000',
         // idSistema: 2
@@ -138,10 +139,10 @@ const store = new Vuex.Store({
       let requestReturn
       if (toDate != null) {
         requestReturn = APIService.get({
-          origen: toCity.codigo,
-          // origen: toCity.codPais, // Dato de la api
-          destino: fromCity.codigo,
-          // destino: fromCity.codPais, // Dato de la api
+          // origen: toCity.codigo, // Original
+          origen: toCountry.codPais,
+          // destino: fromCity.codigo, // Original
+          destino: fromCountry.codPais,
           fecha: toDate.replace(/-/g, ''),
           hora: '0000',
           // idSistema: 2
@@ -221,7 +222,7 @@ const store = new Vuex.Store({
           dispatch('SET_LOADING_SERVICE', { loading: false })
         })
     },
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     SET_LOADING_SERVICE({ commit }, payload) {
       commit('SET_LOADING_SERVICE', { loading: payload.loading })
     },
@@ -329,10 +330,10 @@ const store = new Vuex.Store({
       state.services.loading = loading
     },
     //
-    SET_USER_SEARCHING_FROM_COUNTRY: (state, { city }) => {
+    SET_USER_SEARCHING_FROM_COUNTRY: (state, { country }) => {
       state.searching.from_country = country
     },
-    SET_USER_SEARCHING_TO_COUNTRY: (state, { city }) => {
+    SET_USER_SEARCHING_TO_COUNTRY: (state, { country }) => {
       state.searching.to_country = country
     },
     //

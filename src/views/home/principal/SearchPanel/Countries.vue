@@ -52,6 +52,6 @@ export default {
       result = this.direction === 'from' ? this.translate('from_country') : this.translate('to_country')
       return result
     }
-  }
+  },
 }
 </script>

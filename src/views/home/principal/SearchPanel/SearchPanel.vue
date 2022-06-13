@@ -19,11 +19,11 @@
           
 
             
-            <v-flex xs12 md6 class='pl-3 pr-3'>
+          <v-flex v-show="fromCountry && toCountry" xs12 md6 class='pl-3 pr-3'>
               <cities-list v-model="fromCity" ref='from_search' direction="from"/>
           </v-flex>
 
-          <v-flex xs12 md6 class='pl-3 pr-3'>
+          <v-flex v-show="fromCountry && toCountry" xs12 md6 class='pl-3 pr-3'>
             <cities-list v-model="toCity" direction="to"/>
           </v-flex>
 
