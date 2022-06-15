@@ -1,8 +1,9 @@
 <template>
   <div>
     <!-- item para el seleccionado -->
-    <v-select class="body-1" dark :label="languageChange" :items="countries" color="grey lighten-4" item-text="nomPais"
-      item-value="codPais" bottom return-object persistent-hint clearable autocomplete v-model="userCountry">
+    <v-select @select="paisorigen()" class="body-1" dark :label="languageChange" :items="countries"
+      color="grey lighten-4" item-text="nomPais" item-value="codPais" bottom return-object persistent-hint clearable
+      autocomplete v-model="userCountry">
       <template slot="item" slot-scope="data">
         <template v-if="typeof data.item !== 'object'">
           <v-list-tile-content v-text="data.item"></v-list-tile-content>
@@ -12,7 +13,6 @@
           <v-list-tile-content>
             <v-list-tile-title v-html="` ${data.item.abrevPais} - ${data.item.nomPais}`"></v-list-tile-title>
           </v-list-tile-content>
-
         </template>
       </template>
     </v-select>
@@ -24,7 +24,6 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'CountriesList',
-
   props: {
     direction: {
       type: String,
@@ -32,10 +31,25 @@ export default {
     },
     countrySelected: 1
   },
+data() {
+    return {
+      userCountry: null,
+    }
+  },
+  methods: {
+    paisorigen() {
+      console.log('paisorigenseleccionado');
+      console.log(this.userCountry.codPais);
+      const cod = this.userCountry.codPais
+      this.$store.commit('SET_ORIGIN_COUNTRY_CODE', cod);
+    },
+  },
 
   computed: {
     ...mapGetters({
-      countries: ['getCountriesList']
+      countries: ['getCountriesList',]
+
+
     }),
 
     userCountry: {

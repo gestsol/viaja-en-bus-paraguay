@@ -9,38 +9,32 @@
           </v-flex>
 
           <v-flex xs12 md6 class='pl-3 pr-3'>
-            <countries-list v-model="fromCountry" ref='from_search' direction="from"/>
+            <countries-list v-model="fromCountry" ref='from_search' direction="from" />
           </v-flex>
 
           <v-flex xs12 md6 class='pl-3 pr-3'>
-            <countries-list v-model="toCountry" direction="to"/>
-          </v-flex>
-
-          
-
-            
-          <v-flex v-show="fromCountry && toCountry" xs12 md6 class='pl-3 pr-3'>
-              <cities-list v-model="fromCity" ref='from_search' direction="from"/>
+            <countries-list v-model="toCountry" direction="to" />
           </v-flex>
 
           <v-flex v-show="fromCountry && toCountry" xs12 md6 class='pl-3 pr-3'>
-            <cities-list v-model="toCity" direction="to"/>
+            <cities-list v-model="fromCity" ref='from_search' direction="from" />
           </v-flex>
 
-
-          
-
-
-          <v-flex xs12 md6 class='pl-3 pr-3'>
-            <calendar v-model="fromDate" ref='to_search' direction='from'/>
+          <v-flex v-show="fromCountry && toCountry" xs12 md6 class='pl-3 pr-3'>
+            <cities-list v-model="toCity" direction="to" />
           </v-flex>
 
           <v-flex xs12 md6 class='pl-3 pr-3'>
-            <calendar v-model="toDate" :fromDate="fromDate" direction='to'/>
+            <calendar v-model="fromDate" ref='to_search' direction='from' />
+          </v-flex>
+
+          <v-flex xs12 md6 class='pl-3 pr-3'>
+            <calendar v-model="toDate" :fromDate="fromDate" direction='to' />
           </v-flex>
 
           <v-flex md4 offset-md4 xs12 class='pl-3 pr-3'>
-            <v-btn block class='white--text search-font rounded-search' color="error" @click='validateSearch' :disabled="loadingServices">
+            <v-btn block class='white--text search-font rounded-search' color="error" @click='validateSearch'
+              :disabled="loadingServices">
               <span v-lang.search></span>
             </v-btn>
           </v-flex>
@@ -63,7 +57,7 @@ export default {
     CitiesList,
     Calendar
   },
-  data () {
+  data() {
     return {
       fromDate: '',
       toDate: '',
@@ -74,7 +68,7 @@ export default {
     }
   },
   watch: {
-    fromDate (value) {
+    fromDate(value) {
       const diff = moment(this.toDate).diff(value, 'days')
 
       if (diff <= -1 || value == null) {
@@ -83,13 +77,20 @@ export default {
     }
   },
   methods: {
-    validateSearch () {
+    paisorigen(){
+      console.log('paisorigen')
+      console.log(this.fromCountry.codPais)
+      const codfiltrado = this.fromCountry.codPais
+      this.$store.dispatch('getCities', codfiltrado)
+
+    },
+    validateSearch() {
       this.$notify({
         group: 'stuck-load',
         title: this.translate('search_services'),
         type: 'info'
       })
-      const {fromFail} = localStorage
+      const { fromFail } = localStorage
       if (fromFail) {
         localStorage.removeItem('fromFail')
       }
@@ -104,7 +105,7 @@ export default {
         toCity: this.toCity
       })
     },
-    setUserSearchingData () {
+    setUserSearchingData() {
       this.$store.dispatch('SET_NEW_USER_SEARCHING_DATE', {
         date: this.fromDate,
         direction: 'from'
@@ -136,15 +137,15 @@ export default {
     loadingServices: ['getLoadingService']
   }),
 
-  mounted () {
+  mounted() {
     this.$store.dispatch('LOAD_COUNTRIES_LIST')
     this.$store.dispatch('LOAD_CITIES_LIST')
     this.fromDate = this.$store.state.searching.from_date
     this.toDate = this.$store.state.searching.to_date
-//
+    //
     this.fromCountry = this.$store.state.searching.from_country
     this.toCountry = this.$store.state.searching.to_country
-//
+    //
     this.fromCity = this.$store.state.searching.from_city
     this.toCity = this.$store.state.searching.to_city
   }
@@ -173,6 +174,7 @@ export default {
     margin-top: 100vh;
   }
 }
+
 .center_layout {
   z-index: 2;
 }
@@ -188,7 +190,8 @@ div.card.search_card {
   top: 0;
   width: 140px;
 }
-@media (max-width: 759px){
+
+@media (max-width: 759px) {
   .search_card img {
     width: 20vw;
   }

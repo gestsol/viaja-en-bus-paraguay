@@ -14,7 +14,7 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   plugins: [
     createPersistedState({
-      paths: ['language', 'searching','countries', 'cities', 'seats', 'step', 'payment_info', 'userData']
+      paths: ['language', 'searching', 'countries', 'cities', 'seats', 'step', 'payment_info', 'userData']
     })
   ],
 
@@ -22,6 +22,8 @@ const store = new Vuex.Store({
     language: 'es',
     countries: [],
     cities: [],
+    originCountryCode: 0,
+    destinationCountryCode: 0,
     searching: {
       from_country: null,
       to_country: null,
@@ -95,22 +97,19 @@ const store = new Vuex.Store({
        }).catch(err => {
          console.log(err)
         })
-      */ 
+      */
     },
     //
 
-    
-    async LOAD_CITIES_LIST({ commit }, filt) {
+    async LOAD_CITIES_LIST({ commit }) {
       try {
         const res = await (await fetch(`${nsaEndPoints.ciudadParadas}`)).json()
         // console.log(nsaEndPoints.ciudadParadas)
-        commit('SET_CITIES_LIST', { list: res.filter(item => item.pais === filt) })
+        commit('SET_CITIES_LIST', { list: res })
       } catch (error) {
         console.log(error)
       }
     },
-
-        
 
     LOAD_SERVICES_LIST({ commit, dispatch }, payload) {
       // added country to the payload
@@ -128,9 +127,11 @@ const store = new Vuex.Store({
       }
       const requestGoing = APIService.get({
         // origen: fromCity.codigo, // Original
-        origen: fromCountry.codPais, 
+        paisOrigen: fromCountry.codPais,
+        paisDestino: toCountry.codPais,
+        ciudadOrigen: fromCity.codPais,
         // destino: toCity.codigo, // Original
-        destino: toCountry.codPais, 
+        ciudadDestino: toCity.codPais,
         fecha: fromDate.replace(/-/g, ''),
         hora: '0000',
         // idSistema: 2
@@ -140,9 +141,11 @@ const store = new Vuex.Store({
       if (toDate != null) {
         requestReturn = APIService.get({
           // origen: toCity.codigo, // Original
-          origen: toCountry.codPais,
+          paisOrigen: toCountry.codPais,
+          ciudadOrigen: toCity.codPais,
           // destino: fromCity.codigo, // Original
-          destino: fromCountry.codPais,
+          PaisDestino: fromCountry.codPais,
+          ciudadDestino: fromCity.codPais,
           fecha: toDate.replace(/-/g, ''),
           hora: '0000',
           // idSistema: 2
@@ -222,7 +225,7 @@ const store = new Vuex.Store({
           dispatch('SET_LOADING_SERVICE', { loading: false })
         })
     },
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     SET_LOADING_SERVICE({ commit }, payload) {
       commit('SET_LOADING_SERVICE', { loading: payload.loading })
     },
@@ -315,13 +318,25 @@ const store = new Vuex.Store({
   },
 
   mutations: {
+    SET_ORIGIN_COUNTRY_CODE(state, payload) {
+      state.originCountryCode = payload
+    },
+    SET_DESTINY_COUNTRY_CODE(state, payload) {
+      state.destinyCountryCode = payload
+    },
+
     //
     SET_COUNTRIES_LIST: (state, { list }) => {
       state.countries = list
     },
     //
     SET_CITIES_LIST: (state, { list }) => {
-      state.cities = list
+      /*
+      const dato = state.countries[0].codPais
+      const codigo = dato 
+      state.cities = list.filter(item => item.codPais === codigo) */
+      // state.cities = list.filter(item => item.codPais === 2) //Funcionando
+    state.cities = list
     },
     SET_SERVICES_LIST: (state, { list }) => {
       state.services.data = list
@@ -424,6 +439,12 @@ const store = new Vuex.Store({
   },
 
   getters: {
+
+
+//
+    getOriginCities: state =>  state.cities.filter(item => item.codPais === state.originCountryCode),
+    getDestinyCities: state =>  state.cities.filter(item => item.codPais === state.destinyCountryCode),
+//
     getGifcardAmount: state => state.gifcardAmount,
 
     getLanguage: state => {
