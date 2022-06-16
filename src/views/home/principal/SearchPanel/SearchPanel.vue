@@ -5,7 +5,6 @@
         <v-card-title primary-title>
           <v-flex xs12 class='pl-3 py-3 mb-4'>
             <h2 class="search-panel-title">Compra tus pasajes</h2>
-            <!-- <img src="/static/imgs/logos/badge-cybermonday.png" alt="Insignia de cybermonday" /> -->
           </v-flex>
 
           <v-flex xs12 md6 class='pl-3 pr-3'>
@@ -36,6 +35,9 @@
             <v-btn block class='white--text search-font rounded-search' color="error" @click='validateSearch'
               :disabled="loadingServices">
               <span v-lang.search></span>
+            </v-btn>
+            <v-btn class='white--text search-font rounded-search' color="error" @click='console'>
+              <span>Consola</span>
             </v-btn>
           </v-flex>
         </v-card-title>
@@ -77,12 +79,8 @@ export default {
     }
   },
   methods: {
-    paisorigen(){
-      console.log('paisorigen')
-      console.log(this.fromCountry.codPais)
-      const codfiltrado = this.fromCountry.codPais
-      this.$store.dispatch('getCities', codfiltrado)
-
+    console() {
+      console.log(this.fromCity, this.toCity, this.fromDate, this.toDate, this.fromCountry, this.toCountry)
     },
     validateSearch() {
       this.$notify({
@@ -148,6 +146,7 @@ export default {
     //
     this.fromCity = this.$store.state.searching.from_city
     this.toCity = this.$store.state.searching.to_city
+
   }
 }
 </script>
