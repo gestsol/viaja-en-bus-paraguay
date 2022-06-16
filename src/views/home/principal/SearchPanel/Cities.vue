@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- item para el seleccionado -->
-    <v-select class="body-1" dark :label="languageChange" :items="cities" color="grey lighten-4"
+    <v-select class="body-1" dark :label="languageChange" :items="citiesSelect" color="grey lighten-4"
       item-text="nombreCiudad" :item-value="codCiudad" bottom return-object persistent-hint clearable autocomplete
       v-model="userCity">
       <template slot="item" slot-scope="data">
@@ -36,7 +36,8 @@ export default {
 
   computed: {
     ...mapGetters({
-      cities: ['getOriginCities',]
+      cities: ['getOriginCities'],
+      citiesDestiny: ['getDestinyCities'],
     }),
 
     userCity: {
@@ -47,12 +48,19 @@ export default {
         this.$emit('input', value)
       }
     },
-
     languageChange() {
       let result = ''
       result = this.direction === 'from' ? this.translate('from_city') : this.translate('to_city')
       return result
+    },
+    citiesSelect(){
+      if(this.direction === 'from'){
+        return this.cities
+      }else{
+        return this.citiesDestiny
+      }
     }
+
   }
 }
 </script>

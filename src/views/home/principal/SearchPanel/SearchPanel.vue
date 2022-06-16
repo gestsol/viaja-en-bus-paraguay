@@ -8,18 +8,18 @@
           </v-flex>
 
           <v-flex xs12 md6 class='pl-3 pr-3'>
-            <countries-list v-model="fromCountry" ref='from_search' direction="from" />
+            <countries-list v-model="this.fromCountry" ref='from_search' direction="from" />
           </v-flex>
 
           <v-flex xs12 md6 class='pl-3 pr-3'>
-            <countries-list v-model="toCountry" direction="to" />
+            <countries-list @change="console()" v-model="this.toCountry" direction="to" />
           </v-flex>
 
-          <v-flex v-show="fromCountry && toCountry" xs12 md6 class='pl-3 pr-3'>
+          <v-flex xs12 md6 class='pl-3 pr-3'>
             <cities-list v-model="fromCity" ref='from_search' direction="from" />
           </v-flex>
 
-          <v-flex v-show="fromCountry && toCountry" xs12 md6 class='pl-3 pr-3'>
+          <v-flex xs12 md6 class='pl-3 pr-3'>
             <cities-list v-model="toCity" direction="to" />
           </v-flex>
 
@@ -36,9 +36,13 @@
               :disabled="loadingServices">
               <span v-lang.search></span>
             </v-btn>
+
+<!-- 
             <v-btn class='white--text search-font rounded-search' color="error" @click='console'>
               <span>Consola</span>
-            </v-btn>
+            </v-btn> -->
+
+
           </v-flex>
         </v-card-title>
       </v-card>
@@ -61,12 +65,12 @@ export default {
   },
   data() {
     return {
-      fromDate: '',
-      toDate: '',
-      fromCountry: null,
-      toCountry: null,
       fromCity: null,
-      toCity: null
+      fromCountry: null,
+      fromDate: '',
+      toCity: null,
+      toCountry: null,
+      toDate: '',
     }
   },
   watch: {
@@ -100,8 +104,9 @@ export default {
         fromCountry: this.fromCountry,
         toCountry: this.toCountry,
         fromCity: this.fromCity,
-        toCity: this.toCity
+        toCity: this.toCity,
       })
+        console.log(this.fromCity, this.toCity, this.fromDate, this.toDate, this.fromCountry, this.toCountry)
     },
     setUserSearchingData() {
       this.$store.dispatch('SET_NEW_USER_SEARCHING_DATE', {

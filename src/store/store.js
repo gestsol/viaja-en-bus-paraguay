@@ -23,6 +23,7 @@ const store = new Vuex.Store({
     countries: [],
     cities: [],
     originCountryCode: 0,
+    destinyCountryCode: 0,
     destinationCountryCode: 0,
     searching: {
       from_country: null,
@@ -320,6 +321,11 @@ const store = new Vuex.Store({
   mutations: {
     SET_ORIGIN_COUNTRY_CODE(state, payload) {
       state.originCountryCode = payload
+      state.searching.from_country = payload
+    },
+    SET_DESTINY_COUNTRY_CODE(state, payload) {
+      state.originCountryCode = payload
+      state.searching.to_country = payload
     },
     SET_DESTINY_COUNTRY_CODE(state, payload) {
       state.destinyCountryCode = payload

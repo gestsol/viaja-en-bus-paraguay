@@ -31,17 +31,24 @@ export default {
     },
     countrySelected: 1
   },
-data() {
+  data() {
     return {
       userCountry: null,
+
     }
   },
   methods: {
     paisorigen() {
       console.log('paisorigenseleccionado');
-      console.log(this.userCountry.codPais);
+      const dir = this.direction
       const cod = this.userCountry.codPais
-      this.$store.commit('SET_ORIGIN_COUNTRY_CODE', cod);
+      console.log(cod)
+      console.log(dir)
+      if (dir === 'from') {
+        this.$store.commit('SET_ORIGIN_COUNTRY_CODE', cod);
+      } else {
+        this.$store.commit('SET_DESTINY_COUNTRY_CODE', cod);
+      }
     },
   },
 
