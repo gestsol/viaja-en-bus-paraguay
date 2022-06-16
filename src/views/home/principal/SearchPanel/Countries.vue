@@ -55,8 +55,6 @@ export default {
   computed: {
     ...mapGetters({
       countries: ['getCountriesList',]
-
-
     }),
 
     userCountry: {

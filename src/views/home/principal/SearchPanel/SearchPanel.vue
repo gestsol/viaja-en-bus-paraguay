@@ -16,11 +16,11 @@
           </v-flex>
 
           <v-flex xs12 md6 class='pl-3 pr-3'>
-            <cities-list v-model="fromCity" ref='from_search' direction="from" />
+            <cities-list v-if="occ > 0 && dcc > 0" v-model="fromCity" ref='from_search' direction="from" />
           </v-flex>
 
           <v-flex xs12 md6 class='pl-3 pr-3'>
-            <cities-list v-model="toCity" direction="to" />
+            <cities-list v-if="occ > 0 && dcc > 0" v-model="toCity" direction="to" />
           </v-flex>
 
           <v-flex xs12 md6 class='pl-3 pr-3'>
@@ -37,7 +37,7 @@
               <span v-lang.search></span>
             </v-btn>
 
-<!-- 
+            <!-- 
             <v-btn class='white--text search-font rounded-search' color="error" @click='console'>
               <span>Consola</span>
             </v-btn> -->
@@ -54,7 +54,7 @@
 import CountriesList from './Countries'
 import CitiesList from './Cities'
 import Calendar from './Calendar'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import moment from 'moment'
 
 export default {
@@ -66,7 +66,7 @@ export default {
   data() {
     return {
       fromCity: null,
-      fromCountry: null,
+      fromCountry: this.final,
       fromDate: '',
       toCity: null,
       toCountry: null,
@@ -106,7 +106,7 @@ export default {
         fromCity: this.fromCity,
         toCity: this.toCity,
       })
-        console.log(this.fromCity, this.toCity, this.fromDate, this.toDate, this.fromCountry, this.toCountry)
+      console.log(this.fromCity, this.toCity, this.fromDate, this.toDate, this.fromCountry, this.toCountry)
     },
     setUserSearchingData() {
       this.$store.dispatch('SET_NEW_USER_SEARCHING_DATE', {
@@ -136,13 +136,23 @@ export default {
     }
   },
 
-  computed: mapGetters({
+  computed:
+    mapState(
+      {
+        //oroginCountryCode && destinyCountryCode
+        occ: ['originCountryCode'],
+        dcc: ['destinyCountryCode']
+      }
+    ),
+  ...mapGetters({
     loadingServices: ['getLoadingService']
   }),
 
   mounted() {
     this.$store.dispatch('LOAD_COUNTRIES_LIST')
     this.$store.dispatch('LOAD_CITIES_LIST')
+
+
     this.fromDate = this.$store.state.searching.from_date
     this.toDate = this.$store.state.searching.to_date
     //
