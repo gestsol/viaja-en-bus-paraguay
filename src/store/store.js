@@ -24,10 +24,11 @@ const store = new Vuex.Store({
     cities: [],
     originCountryCode: 0,
     destinyCountryCode: 0,
-    destinationCountryCode: 0,
     searching: {
-      from_country: null,
-      to_country: null,
+      // from_country: null,
+      from_country: null ? 0 : this.originCountryCode,
+      // to_country: null,
+      to_country: null ? 0 : this.originCountryCode,
       from_city: null,
       to_city: null,
       from_date: null,
@@ -324,11 +325,8 @@ const store = new Vuex.Store({
       state.searching.from_country = payload
     },
     SET_DESTINY_COUNTRY_CODE(state, payload) {
-      state.originCountryCode = payload
-      state.searching.to_country = payload
-    },
-    SET_DESTINY_COUNTRY_CODE(state, payload) {
       state.destinyCountryCode = payload
+      state.searching.to_country = payload
     },
 
     //
@@ -337,11 +335,6 @@ const store = new Vuex.Store({
     },
     //
     SET_CITIES_LIST: (state, { list }) => {
-      /*
-      const dato = state.countries[0].codPais
-      const codigo = dato 
-      state.cities = list.filter(item => item.codPais === codigo) */
-      // state.cities = list.filter(item => item.codPais === 2) //Funcionando
     state.cities = list
     },
     SET_SERVICES_LIST: (state, { list }) => {

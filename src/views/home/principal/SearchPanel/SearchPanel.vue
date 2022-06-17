@@ -12,15 +12,15 @@
           </v-flex>
 
           <v-flex xs12 md6 class='pl-3 pr-3'>
-            <countries-list @change="console()" v-model="this.toCountry" direction="to" />
+            <countries-list v-model="this.toCountry" direction="to" />
           </v-flex>
 
           <v-flex xs12 md6 class='pl-3 pr-3'>
-            <cities-list v-if="occ > 0 && dcc > 0" v-model="fromCity" ref='from_search' direction="from" />
+            <cities-list v-if="oCountrycd > 0 && dCountrycd > 0" v-model="fromCity" ref='from_search' direction="from" />
           </v-flex>
 
           <v-flex xs12 md6 class='pl-3 pr-3'>
-            <cities-list v-if="occ > 0 && dcc > 0" v-model="toCity" direction="to" />
+            <cities-list v-if="oCountrycd > 0 && dCountrycd > 0" v-model="toCity" direction="to" />
           </v-flex>
 
           <v-flex xs12 md6 class='pl-3 pr-3'>
@@ -36,13 +36,6 @@
               :disabled="loadingServices">
               <span v-lang.search></span>
             </v-btn>
-
-            <!-- 
-            <v-btn class='white--text search-font rounded-search' color="error" @click='console'>
-              <span>Consola</span>
-            </v-btn> -->
-
-
           </v-flex>
         </v-card-title>
       </v-card>
@@ -66,7 +59,7 @@ export default {
   data() {
     return {
       fromCity: null,
-      fromCountry: this.final,
+      fromCountry: null,
       fromDate: '',
       toCity: null,
       toCountry: null,
@@ -83,10 +76,10 @@ export default {
     }
   },
   methods: {
-    console() {
-      console.log(this.fromCity, this.toCity, this.fromDate, this.toDate, this.fromCountry, this.toCountry)
-    },
+    
     validateSearch() {
+      console.log(`pais origen:${this.fromCountry} / pais destino: ${this.toCountry} / ${this.fromCity} ${this.fromDate} ${this.toCity} ${this.toDate}`)
+      /*
       this.$notify({
         group: 'stuck-load',
         title: this.translate('search_services'),
@@ -107,6 +100,7 @@ export default {
         toCity: this.toCity,
       })
       console.log(this.fromCity, this.toCity, this.fromDate, this.toDate, this.fromCountry, this.toCountry)
+      */
     },
     setUserSearchingData() {
       this.$store.dispatch('SET_NEW_USER_SEARCHING_DATE', {
@@ -140,8 +134,8 @@ export default {
     mapState(
       {
         //oroginCountryCode && destinyCountryCode
-        occ: ['originCountryCode'],
-        dcc: ['destinyCountryCode']
+        oCountrycd: ['originCountryCode'],
+        dCountrycd: ['destinyCountryCode']
       }
     ),
   ...mapGetters({

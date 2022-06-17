@@ -1,8 +1,8 @@
 <template>
   <div>
     <!-- item para el seleccionado -->
-    <v-select class="body-1" dark :label="languageChange" :items="citiesSelect" color="grey lighten-4"
-      item-text="nombreCiudad" :item-value="codCiudad" bottom return-object persistent-hint clearable autocomplete
+    <v-select @select="citySelect()" class="body-1" dark :label="languageChange" :items="cities" 
+    color="grey lighten-4" item-text="nombreCiudad" :item-value="codCiudad" bottom return-object persistent-hint clearable autocomplete
       v-model="userCity">
       <template slot="item" slot-scope="data">
         <template v-if="typeof data.item !== 'object'">
@@ -33,10 +33,22 @@ export default {
     },
     countrySelected: 1
   },
+  methods: {
+    countrySelect() {
+      const dir = this.direction
+      const pais = this.userCountry
+      console.log(`Pais Seleccionado: ${dir} - [${pais.codPais}] ${pais.nomPais}`);
+      if (dir === 'from') {
+        this.$store.commit('SET_ORIGIN_COUNTRY_CODE', pais.codPais);
+      } else {
+        this.$store.commit('SET_DESTINY_COUNTRY_CODE', pais.codPais);
+      }
+    },
+  },
 
   computed: {
     ...mapGetters({
-      cities: ['getOriginCities'],
+      citiesOrigin: ['getOriginCities'],
       citiesDestiny: ['getDestinyCities'],
     }),
 
@@ -53,9 +65,9 @@ export default {
       result = this.direction === 'from' ? this.translate('from_city') : this.translate('to_city')
       return result
     },
-    citiesSelect(){
+    cities(){
       if(this.direction === 'from'){
-        return this.cities
+        return this.citiesOrigin
       }else{
         return this.citiesDestiny
       }

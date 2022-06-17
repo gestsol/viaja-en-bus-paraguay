@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- item para el seleccionado -->
-    <v-select @select="paisorigen()" class="body-1" dark :label="languageChange" :items="countries"
+    <v-select @select="countrySelect()" class="body-1" dark :label="languageChange" :items="countries"
       color="grey lighten-4" item-text="nomPais" item-value="codPais" bottom return-object persistent-hint clearable
       autocomplete v-model="userCountry">
       <template slot="item" slot-scope="data">
@@ -38,16 +38,14 @@ export default {
     }
   },
   methods: {
-    paisorigen() {
-      console.log('paisorigenseleccionado');
+    countrySelect() {
       const dir = this.direction
-      const cod = this.userCountry.codPais
-      console.log(cod)
-      console.log(dir)
+      const pais = this.userCountry
+      console.log(`Pais Seleccionado: ${dir} - [${pais.codPais}] ${pais.nomPais}`);
       if (dir === 'from') {
-        this.$store.commit('SET_ORIGIN_COUNTRY_CODE', cod);
+        this.$store.commit('SET_ORIGIN_COUNTRY_CODE', pais.codPais);
       } else {
-        this.$store.commit('SET_DESTINY_COUNTRY_CODE', cod);
+        this.$store.commit('SET_DESTINY_COUNTRY_CODE', pais.codPais);
       }
     },
   },
@@ -56,15 +54,6 @@ export default {
     ...mapGetters({
       countries: ['getCountriesList',]
     }),
-
-    userCountry: {
-      get() {
-        return this.value
-      },
-      set(value) {
-        this.$emit('input', value)
-      }
-    },
 
     languageChange() {
       let result = ''
