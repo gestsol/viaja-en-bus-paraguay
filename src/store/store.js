@@ -24,6 +24,8 @@ const store = new Vuex.Store({
     cities: [],
     originCountryCode: 0,
     destinyCountryCode: 0,
+    originDivPolCityCode: 0,
+    destinyDivPolCityCode: 0,
     originCityCode: 0,
     destinyCityCode: 0,
     searching: {
@@ -33,6 +35,8 @@ const store = new Vuex.Store({
       to_country: null,
       from_city: null,
       to_city: null,
+      from_div_city: null,
+      to_div_city: null,
       from_date: null,
       to_date: null
     },
@@ -331,13 +335,23 @@ const store = new Vuex.Store({
       state.destinyCountryCode = payload
       state.searching.to_country = payload
     },
+    SET_ORIGIN_DIVPOL_CITY_CODE(state, payload) {
+      state.originDivPolCityCode = payload
+      state.searching.from_div_city = payload
+    },
+    SET_DESTINY_DIVPOL_CITY_CODE(state, payload) {
+      state.destinyDivPolCityCode = payload
+      state.searching.to_div_city = payload
+    },
     SET_ORIGIN_CITY_CODE(state, payload) {
       state.originCityCode = payload
       state.searching.from_city = payload
+
     },
     SET_DESTINY_CITY_CODE(state, payload) {
       state.destinyCityCode = payload
       state.searching.to_city = payload
+
     },
 
     //

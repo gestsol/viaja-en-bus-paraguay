@@ -60,7 +60,9 @@ export default {
     return {
       fromCity: null,
       fromCountry: null,
+      fromDivPolCity: null,
       fromDate: '',
+      toDivPolCity: null,
       toCity: null,
       toCountry: null,
       toDate: '',

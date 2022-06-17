@@ -1,32 +1,19 @@
 <template>
   <v-layout row wrap class="font">
     <v-flex xs12 style="position: relative">
-      <v-menu
-        lazy :close-on-content-click="true" transition="scale-transition"
-        offset-y full-width color="blue darken-4" max-width="290px"
-        min-width="290px">
+      <v-menu lazy :close-on-content-click="true" transition="scale-transition" offset-y full-width
+        color="blue darken-4" max-width="290px" min-width="290px">
 
-        <v-text-field
-          class="font"
-          dark color="grey lighten-1" slot="activator"
-          :label="languageChange"
-          v-model="formattedDate"
-          readonly
-        >
+        <v-text-field class="font" dark color="grey lighten-1" slot="activator" :label="languageChange"
+          v-model="formattedDate" readonly>
         </v-text-field>
 
-        <v-date-picker
-          min="2017-01-24"
-          v-model="userCalendar"
-          :allowed-dates="enableToDate"
-          color="primary"
-          :locale="localeChange"
-          :first-day-of-week="firstDayOfweek"
-          clearable
-        >
+        <v-date-picker min="2017-01-24" v-model="userCalendar" :allowed-dates="enableToDate" color="primary"
+          :locale="localeChange" :first-day-of-week="firstDayOfweek" clearable>
         </v-date-picker>
       </v-menu>
-      <v-btn icon dark @click="clearDate" class="mt-3 pl-1 btn-picker" v-if="direction === 'from' ? false : userCalendar">
+      <v-btn icon dark @click="clearDate" class="mt-3 pl-1 btn-picker"
+        v-if="direction === 'from' ? false : userCalendar">
         <v-icon>clear</v-icon>
       </v-btn>
     </v-flex>
@@ -54,19 +41,19 @@ export default {
     }
   },
 
-  data () {
+  data() {
     return {
       firstDayOfweek: 1,
       formattedDate: null,
       allowedFromDates: []
     }
   },
-  mounted () {
+  mounted() {
     let i = -1
     this.allowedFromDates = [...Array(90)].map(() => { return moment().add(i++, 'd').format('YYYY-MM-DD') })
   },
   methods: {
-    clearDate () {
+    clearDate() {
       this.formattedDate = null
       this.userCalendar = null
     }
@@ -75,7 +62,7 @@ export default {
     ...mapGetters({
       searching: ['getSearching']
     }),
-    enableToDate () {
+    enableToDate() {
       const fromDate = this.direction === 'from' ? moment().subtract(1, 'days') : this.fromDate
       return (date) => {
         const diff = moment(date).diff(fromDate)
@@ -83,7 +70,7 @@ export default {
       }
     },
     userCalendar: {
-      get () {
+      get() {
         if (!this.value) {
           this.formattedDate = null
           return null
@@ -92,18 +79,18 @@ export default {
         this.formattedDate = moment(this.value).format(format)
         return this.value
       },
-      set (value) {
+      set(value) {
         this.$emit('input', value)
       }
     },
-    localeChange () {
+    localeChange() {
       this.firstDayOfweek = this.language === 'en' ? 0 : 1
       moment.locale(this.language)
       const format = 'dddd LL'
       if (this.userCalendar) this.formattedDateFrom = moment(this.userCalendar).format(format)
       return this.translate('locale')
     },
-    languageChange () {
+    languageChange() {
       let result = ''
       result = this.direction === 'from' ? this.translate('from_date') : this.translate('to_date')
       return result

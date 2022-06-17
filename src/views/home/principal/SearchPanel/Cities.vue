@@ -43,9 +43,13 @@ export default {
       const ciudad = this.userCity
       console.log(`Pais Seleccionado: ${dir} - [${ciudad.codPais}-${ciudad.codDivisionPolitica}-${ciudad.codCiudad}] ${ciudad.nombreCiudad}`);
       if (dir === 'from') {
+        this.$store.commit('SET_ORIGIN_DIVPOL_CITY_CODE', ciudad.codDivisionPolitica);
         this.$store.commit('SET_ORIGIN_CITY_CODE', ciudad.codCiudad);
+        console.log('final')
       } else {
+        this.$store.commit('SET_DESTINY_DIVPOL_CITY_CODE', ciudad.codDivisionPolitica);
         this.$store.commit('SET_DESTINY_CITY_CODE', ciudad.codCiudad);
+        console.log('final')
       }
     },
   },
