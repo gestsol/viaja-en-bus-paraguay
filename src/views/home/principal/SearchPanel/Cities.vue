@@ -1,8 +1,8 @@
 <template>
   <div>
     <!-- item para el seleccionado -->
-    <v-select @select="citySelect()" class="body-1" dark :label="languageChange" :items="cities" 
-    color="grey lighten-4" item-text="nombreCiudad" :item-value="codCiudad" bottom return-object persistent-hint clearable autocomplete
+    <v-select @select="citySelect()" class="body-1" dark :label="languageChange" :items="cities" color="grey lighten-4"
+      item-text="nombreCiudad" :item-value="codCiudad" bottom return-object persistent-hint clearable autocomplete
       v-model="userCity">
       <template slot="item" slot-scope="data">
         <template v-if="typeof data.item !== 'object'">
@@ -25,7 +25,6 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'CitiesList',
-
   props: {
     direction: {
       type: String,
@@ -33,15 +32,20 @@ export default {
     },
     countrySelected: 1
   },
+  data() {
+    return {
+      userCity: null,
+    }
+  },
   methods: {
-    countrySelect() {
+    citySelect() {
       const dir = this.direction
-      const pais = this.userCountry
-      console.log(`Pais Seleccionado: ${dir} - [${pais.codPais}] ${pais.nomPais}`);
+      const ciudad = this.userCity
+      console.log(`Pais Seleccionado: ${dir} - [${ciudad.codPais}-${ciudad.codDivisionPolitica}-${ciudad.codCiudad}] ${ciudad.nombreCiudad}`);
       if (dir === 'from') {
-        this.$store.commit('SET_ORIGIN_COUNTRY_CODE', pais.codPais);
+        this.$store.commit('SET_ORIGIN_CITY_CODE', ciudad.codCiudad);
       } else {
-        this.$store.commit('SET_DESTINY_COUNTRY_CODE', pais.codPais);
+        this.$store.commit('SET_DESTINY_CITY_CODE', ciudad.codCiudad);
       }
     },
   },
@@ -51,24 +55,15 @@ export default {
       citiesOrigin: ['getOriginCities'],
       citiesDestiny: ['getDestinyCities'],
     }),
-
-    userCity: {
-      get() {
-        return this.value
-      },
-      set(value) {
-        this.$emit('input', value)
-      }
-    },
     languageChange() {
       let result = ''
       result = this.direction === 'from' ? this.translate('from_city') : this.translate('to_city')
       return result
     },
-    cities(){
-      if(this.direction === 'from'){
+    cities() {
+      if (this.direction === 'from') {
         return this.citiesOrigin
-      }else{
+      } else {
         return this.citiesDestiny
       }
     }

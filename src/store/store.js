@@ -24,11 +24,13 @@ const store = new Vuex.Store({
     cities: [],
     originCountryCode: 0,
     destinyCountryCode: 0,
+    originCityCode: 0,
+    destinyCityCode: 0,
     searching: {
       // from_country: null,
-      from_country: null ? 0 : this.originCountryCode,
+      from_country: null,
       // to_country: null,
-      to_country: null ? 0 : this.originCountryCode,
+      to_country: null,
       from_city: null,
       to_city: null,
       from_date: null,
@@ -320,6 +322,7 @@ const store = new Vuex.Store({
   },
 
   mutations: {
+    //
     SET_ORIGIN_COUNTRY_CODE(state, payload) {
       state.originCountryCode = payload
       state.searching.from_country = payload
@@ -327,6 +330,14 @@ const store = new Vuex.Store({
     SET_DESTINY_COUNTRY_CODE(state, payload) {
       state.destinyCountryCode = payload
       state.searching.to_country = payload
+    },
+    SET_ORIGIN_CITY_CODE(state, payload) {
+      state.originCityCode = payload
+      state.searching.from_city = payload
+    },
+    SET_DESTINY_CITY_CODE(state, payload) {
+      state.destinyCityCode = payload
+      state.searching.to_city = payload
     },
 
     //
