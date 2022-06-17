@@ -69,6 +69,8 @@ export default {
     }
   },
   watch: {
+
+    /*
     fromDate(value) {
       const diff = moment(this.toDate).diff(value, 'days')
 
@@ -76,6 +78,7 @@ export default {
         this.toDate = null
       }
     }
+    */
   },
   methods: {
     

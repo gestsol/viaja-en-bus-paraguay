@@ -346,12 +346,16 @@ const store = new Vuex.Store({
     SET_ORIGIN_CITY_CODE(state, payload) {
       state.originCityCode = payload
       state.searching.from_city = payload
-
     },
     SET_DESTINY_CITY_CODE(state, payload) {
       state.destinyCityCode = payload
       state.searching.to_city = payload
-
+    },
+    SET_ORIGIN_DATE(state, payload) {
+      state.searching.from_date = payload
+    },
+    SET_DESTINY_DATE(state, payload) {
+      state.searching.to_date = payload
     },
 
     //
