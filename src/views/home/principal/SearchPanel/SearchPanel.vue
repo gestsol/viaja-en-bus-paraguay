@@ -84,6 +84,8 @@ export default {
     
     validateSearch() {
       console.log(`pais origen:${this.fromCountry} / pais destino: ${this.toCountry} / ${this.fromCity} ${this.fromDate} ${this.toCity} ${this.toDate}`)
+
+
       /*
       this.$notify({
         group: 'stuck-load',
@@ -150,7 +152,6 @@ export default {
   mounted() {
     this.$store.dispatch('LOAD_COUNTRIES_LIST')
     this.$store.dispatch('LOAD_CITIES_LIST')
-
 
     this.fromDate = this.$store.state.searching.from_date
     this.toDate = this.$store.state.searching.to_date

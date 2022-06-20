@@ -22,6 +22,7 @@ const store = new Vuex.Store({
     language: 'es',
     countries: [],
     cities: [],
+    travel: [],
     originCountryCode: 0,
     destinyCountryCode: 0,
     originDivPolCityCode: 0,
@@ -112,12 +113,36 @@ const store = new Vuex.Store({
     async LOAD_CITIES_LIST({ commit }) {
       try {
         const res = await (await fetch(`${nsaEndPoints.ciudadParadas}`)).json()
-        // console.log(nsaEndPoints.ciudadParadas)
         commit('SET_CITIES_LIST', { list: res })
       } catch (error) {
         console.log(error)
       }
     },
+    async LOAD_TRAVEL_LIST({ commit }) {
+      try {
+        const res = await (await fetch(`${nsaEndPoints.listaProximos}`)).json()
+        commit('SET_TRAVEL_LIST', { list: res })
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     LOAD_SERVICES_LIST({ commit, dispatch }, payload) {
       // added country to the payload
@@ -362,10 +387,15 @@ const store = new Vuex.Store({
     SET_COUNTRIES_LIST: (state, { list }) => {
       state.countries = list
     },
-    //
     SET_CITIES_LIST: (state, { list }) => {
-    state.cities = list
+      state.cities = list
     },
+    SET_TRAVEL_LIST: (state, { list }) => {
+      state.travel = list
+    },
+
+
+    //
     SET_SERVICES_LIST: (state, { list }) => {
       state.services.data = list
     },
@@ -482,10 +512,13 @@ const store = new Vuex.Store({
     getCountriesList: state => {
       return state.countries.filter(countries => !countries.completed)
     },
-    //
     getCitiesList: state => {
       return state.cities.filter(cities => !cities.completed)
     },
+    getTravelsList: state => {
+      return state.travel.filter(travel => !travel.completed)
+    },
+    //
     getServiceFiltered: state => {
       const serviceFilters = state.serviceFilters
       const servicesByCompany = state.services.data.filter(service => {
