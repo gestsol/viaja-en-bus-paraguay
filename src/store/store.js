@@ -22,7 +22,7 @@ const store = new Vuex.Store({
     language: 'es',
     countries: [],
     cities: [],
-    travel: [],
+    travels: [],
     originCountryCode: 0,
     destinyCountryCode: 0,
     originDivPolCityCode: 0,
@@ -118,10 +118,10 @@ const store = new Vuex.Store({
         console.log(error)
       }
     },
-    async LOAD_TRAVEL_LIST({ commit }) {
+    async LOAD_TRAVELS_LIST({ commit }) {
       try {
         const res = await (await fetch(`${nsaEndPoints.listaProximos}`)).json()
-        commit('SET_TRAVEL_LIST', { list: res })
+        commit('SET_TRAVELS_LIST', { list: res })
       } catch (error) {
         console.log(error)
       }
@@ -390,8 +390,8 @@ const store = new Vuex.Store({
     SET_CITIES_LIST: (state, { list }) => {
       state.cities = list
     },
-    SET_TRAVEL_LIST: (state, { list }) => {
-      state.travel = list
+    SET_TRAVELS_LIST: (state, { list }) => {
+      state.travels = list
     },
 
 
@@ -516,7 +516,7 @@ const store = new Vuex.Store({
       return state.cities.filter(cities => !cities.completed)
     },
     getTravelsList: state => {
-      return state.travel.filter(travel => !travel.completed)
+      return state.travels.filter(travels => !travels.completed)
     },
     //
     getServiceFiltered: state => {
