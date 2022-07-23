@@ -1,14 +1,27 @@
 <template>
   <section>
-    <div class="card">
+    <div class="home-card">
       <slot />
     </div>
   </section>
 </template>
 <style lang="stylus" scoped>
-.card {
+section {
+  margin: 118px 20px;
+}
+.home-card {
   border: 1px solid #70707052;
   border-radius: 30px;
+  padding: 54px 25px;
+}
+
+@media (min-width: 1400px) {
+  section {
+    margin: 118px 156px;
+  }
+  .home-card {
+    padding: 54px 75px;
+  }
 }
 </style>
 

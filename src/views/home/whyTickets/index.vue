@@ -3,16 +3,22 @@
     <h2 class="question">¿Por qué Boletos Paraguay?</h2>
     <answers />
     <devices />
+    <media />
+    <frequents />
   </section>
 </template>
 <script>
 import Answers from './Answers'
 import Devices from './Devices'
+import Media from './Media'
+import Frequents from './Frequents'
 
 export default {
   components: {
     Answers,
-    Devices
+    Devices,
+    Media,
+    Frequents
   }
 }
 </script>
