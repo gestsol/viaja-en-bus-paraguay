@@ -15,9 +15,7 @@
                     <v-layout row wrap>
                       <v-flex>
                         <img
-                          :src="ciudadOrigen === '13101420' ?
-                          '/static/imgs/logos/NSA.png':
-                          '/static/imgs/logos/expreso paraguay.png'"
+                          src="/static/imgs/logos/NSA.png"
                           class="service-company-image">
                       </v-flex>
                       <v-flex>

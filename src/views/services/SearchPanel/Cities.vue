@@ -5,7 +5,7 @@
     :label="languageChange"
     :items="cities"
     color="grey lighten-4"
-    item-text="nombre"
+    item-text="nomPais"
     item-value="codigo"
     bottom
     return-object

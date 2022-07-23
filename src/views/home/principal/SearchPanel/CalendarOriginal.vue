@@ -5,15 +5,15 @@
         color="blue darken-4" max-width="290px" min-width="290px">
 
         <v-text-field class="font" dark color="grey lighten-1" slot="activator" :label="languageChange"
-          v-model="formdate" readonly>
+          v-model="formattedDate" readonly>
         </v-text-field>
 
-        <v-date-picker @input="dateSelect" min="2017-01-24" v-model="datepick" :allowed-dates="enableToDate" color="primary"
-          :locale="localeChange" :first-day-of-week="firstDayOfweek">
+        <v-date-picker min="2017-01-24" v-model="userCalendar" :allowed-dates="enableToDate" color="primary"
+          :locale="localeChange" :first-day-of-week="firstDayOfweek" clearable>
         </v-date-picker>
       </v-menu>
       <v-btn icon dark @click="clearDate" class="mt-3 pl-1 btn-picker"
-        v-if="direction === 'to' && newprop !== ''">
+        v-if="direction === 'from' ? false : userCalendar">
         <v-icon>clear</v-icon>
       </v-btn>
     </v-flex>
@@ -31,58 +31,56 @@ export default {
       type: String,
       require: true
     },
+    fromDate: {
+      type: String,
+      require: false
+    },
+    value: {
+      type: String,
+      require: false
+    }
   },
 
   data() {
     return {
       firstDayOfweek: 1,
-      datepick: null,
-      formdate: '',
-      newprop: 'asd'
+      formattedDate: null,
+      allowedFromDates: []
     }
   },
   mounted() {
-},
+    let i = -1
+    this.allowedFromDates = [...Array(90)].map(() => { return moment().add(i++, 'd').format('YYYY-MM-DD') })
+  },
   methods: {
-    dateSelect() {
-      const dir = this.direction
-      const format = 'dddd LL'
-      this.formdate = moment(this.datepick).format(format)
-      const date = this.formdate
-
-      console.log(`Fecha Seleccionada: ${dir} - [${date}]`);
-
-      if (dir === 'from') {
-        this.$store.commit('SET_ORIGIN_DATE', date);
-      } else {
-        this.$store.commit('SET_DESTINY_DATE', date);
-      }
-    },
-
-
-    console(){
-      console.log('hola')
-      console.log(this.firstDayOfweek)
-      console.log(this.datepick)
-
-      
-      const format = 'dddd LL'
-      this.formdate = moment(this.datepick).format(format)
-    },
     clearDate() {
-      this.formdate = ''
+      this.formattedDate = null
+      this.userCalendar = null
     }
   },
   computed: {
     ...mapGetters({
       searching: ['getSearching']
     }),
-    
     enableToDate() {
       const fromDate = this.direction === 'from' ? moment().subtract(1, 'days') : this.fromDate
       return (date) => {
         const diff = moment(date).diff(fromDate)
         return diff > -1
+      }
+    },
+    userCalendar: {
+      get() {
+        if (!this.value) {
+          this.formattedDate = null
+          return null
+        }
+        const format = 'dddd LL'
+        this.formattedDate = moment(this.value).format(format)
+        return this.value
+      },
+      set(value) {
+        this.$emit('input', value)
       }
     },
     localeChange() {

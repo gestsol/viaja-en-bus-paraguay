@@ -51,6 +51,9 @@ import Data from '@v/services/stepper/ConfirmationPaymentData'
 import List from '@v/services/stepper/List/Index'
 import Payment from '@v/services/Payment/Index'
 // import Wbpay from '@v/services/wbpay'
+// V2 Services
+
+import ServicesV2 from '@v/services/ServicesV2'
 
 // Mobile routes
 import MobileFilters from '@v/services/filters/MobileFilters'
@@ -131,6 +134,38 @@ const router = new Router({
         }
       ]
     },
+    // V2
+    {
+      path: '/servicesv2',
+      name: 'servicesv2',
+      component: ServicesV2
+
+      /*
+      children: [
+        {
+          path: '/',
+          component: ListContainer,
+          children: [
+            {
+              path: '/',
+              name: 'List',
+              component: List
+            },
+            {
+              path: 'servicesPaymentData',
+              name: 'ServicesPaymentData',
+              component: Data
+            }
+          ]
+        },
+        {
+          path: '/payment/:type',
+          name: 'Payment',
+          component: Payment
+        }
+      ] */
+    },
+    //
     {
       path: '/filters',
       name: 'filters',
