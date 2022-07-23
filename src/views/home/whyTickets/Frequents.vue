@@ -13,6 +13,10 @@
         <li>De Asuncion a La Plata</li>
       </ul>
     </div>
+    <a class="frequents-link">
+      <i class="fa fa-arrow-right"></i>
+      Más destinos
+    </a>
   </card>
 </template>
 <script>
@@ -46,6 +50,23 @@ export default {
     list-style: none;
     font-size: 1.5rem;
     color: white;
+  }
+  ul > li {
+    margin: 50px 0;
+  }
+  ul:nth-child(1) > li:last-child {
+    margin-bottom: 0;
+  }
+}
+.frequents-link {
+  display: block;
+  color: #FF3B33;
+  font-size: 1.5rem;
+  text-align: center;
+  font-weight: bold;
+  .fa {
+    font-size: 1.8rem;
+    margin-right: 1rem;
   }
 }
 </style>

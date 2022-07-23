@@ -9,7 +9,7 @@
 
       <header-app />
       <router-view></router-view>
-      <!-- <footer-app /> -->
+      <footer-app />
     </v-content>
   </v-app>
 </template>
