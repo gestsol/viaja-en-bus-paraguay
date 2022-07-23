@@ -1,57 +1,55 @@
 <template>
-  <footer>
-    <div class="footer-content">
-      <div class="footer-logo">
-        <img src="/static/imgs/logos/logo boletos paraguay.svg" alt="footer-logo" />
-      </div>
-      <div class="footer-nav">
-        <h2>Nuestra empresa</h2>
-        <nav>
-          <ul>
-            <li>Nuestras alianzas</li>
-            <li>Nuestros inversionistas</li>
-            <li>Trabaja con nosotros</li>
-            <li>Prensa</li>
-            <li>Contáctanos</li>
-          </ul>
-        </nav>
-      </div>
-      <div class="footer-nav">
-        <h2>Información útil</h2>
-        <nav>
-          <ul>
-            <li>Preguntas frecuentes</li>
-            <li>Términos y condiciones</li>
-            <li>Políticas de privacidad</li>
-            <li>Agentes de viaje</li>
-            <li>Mapa del sitio</li>
-          </ul>
-        </nav>
-      </div>
-      <div class="footer-contact">
-        <form>
-          <div>
-            <label for="email">Suscríbite</label>
-            <input
-              :class="{ 'input-error': error }"
-              type="text"
-              @input="input"
-              v-model="email"
-              name="email"
-              placeholder="Correo electrónico"
-            />
-          </div>
-          <v-btn block class="white--text" @click="send">
-            <span v-lang.send></span>
-          </v-btn>
-        </form>
-
-        <div class="footer-rrss">
-          <i class="fa fa-twitter" aria-hidden="true" />
-          <i class="fa fa-facebook" aria-hidden="true" />
-          <i class="fa fa-instagram" aria-hidden="true" />
-          <i class="fa fa-spotify" aria-hidden="true" />
+  <footer class="footer-content">
+    <div class="footer-logo">
+      <img src="/static/imgs/logos/logo boletos paraguay.svg" alt="footer-logo" />
+    </div>
+    <div class="footer-nav">
+      <h2>Nuestra empresa</h2>
+      <nav>
+        <ul>
+          <li>Nuestras alianzas</li>
+          <li>Nuestros inversionistas</li>
+          <li>Trabaja con nosotros</li>
+          <li>Prensa</li>
+          <li>Contáctanos</li>
+        </ul>
+      </nav>
+    </div>
+    <div class="footer-nav">
+      <h2>Información útil</h2>
+      <nav>
+        <ul>
+          <li>Preguntas frecuentes</li>
+          <li>Términos y condiciones</li>
+          <li>Políticas de privacidad</li>
+          <li>Agentes de viaje</li>
+          <li>Mapa del sitio</li>
+        </ul>
+      </nav>
+    </div>
+    <div class="footer-contact">
+      <form>
+        <div>
+          <label for="email">Suscríbite</label>
+          <input
+            :class="{ 'input-error': error }"
+            type="text"
+            @input="input"
+            v-model="email"
+            name="email"
+            placeholder="Correo electrónico"
+          />
         </div>
+        <v-btn block class="white--text" @click="send">
+          <span v-lang.send></span>
+        </v-btn>
+      </form>
+
+      <div class="footer-rrss">
+        <i class="fa fa-twitter" aria-hidden="true" />
+        <i class="fa fa-facebook" aria-hidden="true" />
+        <i class="fa fa-instagram" aria-hidden="true" />
+        <i class="fa fa-spotify" aria-hidden="true" />
       </div>
     </div>
   </footer>
@@ -75,7 +73,6 @@ export default {
       }
 
       this.error = result
-      console.log(this.email, this.error)
     },
     input() {
       this.error = false
@@ -85,23 +82,25 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-footer {
-  padding: 57px 20px;
+.footer-content {
   background-color: #DDDBDB;
+  padding: 57px 40px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: 1fr auto;
 }
 
 .footer-logo {
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
   img {
+    max-height: 275px;
     width: 100%;
   }
 }
 
-.footer-content {
-  display: flex;
-  justify-content: center;
-  gap: 3rem;
-}
 .footer-nav {
+  grid-row: 2 / 3;
   color: #4B7DB8;
   h2 {
     font-weight: bold;
@@ -117,7 +116,17 @@ footer {
   }
 }
 
+& > div:nth-child(2) {
+  grid-column: 2 / 3;
+}
+
+& > div:nth-child(3) {
+  grid-column: 3 / 4;
+}
+
 .footer-contact {
+  grid-column: 4 / 5;
+  grid-row: 2 / 3;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -158,7 +167,7 @@ footer {
       border-radius: 8px;
       color: white;
       height: 33px;
-      width: 100px;
+      max-width: 100px;
       margin: 0;
     }
   }
