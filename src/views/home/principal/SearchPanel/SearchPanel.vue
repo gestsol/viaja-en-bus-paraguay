@@ -1,39 +1,52 @@
 <template>
   <v-layout row wrap align-center justify-center class="search-font">
     <v-flex xs12 sm12 md8 lg8>
-      <v-card class='search_card elevation-24 rounded-search-box mt-5'>
+      <v-card class="search_card elevation-24 rounded-search-box mt-5">
         <v-card-title primary-title>
-          <v-flex xs12 class='pl-3 py-3 mb-4'>
+          <v-flex xs12 class="pl-3 py-3 mb-4">
             <h2 class="search-panel-title">Compra tus pasajes</h2>
           </v-flex>
 
-          <v-flex xs12 md6 class='pl-3 pr-3'>
-            <countries-list v-model="this.fromCountry" ref='from_search' direction="from" />
+          <v-flex xs12 md6 class="pl-3 pr-3">
+            <countries-list v-model="this.fromCountry" ref="from_search" direction="from" />
           </v-flex>
 
-          <v-flex xs12 md6 class='pl-3 pr-3'>
+          <v-flex xs12 md6 class="pl-3 pr-3">
             <countries-list v-model="this.toCountry" direction="to" />
           </v-flex>
 
-          <v-flex xs12 md6 class='pl-3 pr-3'>
-            <cities-list v-if="oCountrycd > 0 && dCountrycd > 0" v-model="fromCity" ref='from_search' direction="from" />
+          <v-flex xs12 md6 class="pl-3 pr-3">
+            <cities-list v-if="shouldShowCities" v-model="fromCity" ref="from_search" direction="from" />
           </v-flex>
 
-          <v-flex xs12 md6 class='pl-3 pr-3'>
-            <cities-list v-if="oCountrycd > 0 && dCountrycd > 0" v-model="toCity" direction="to" />
+          <v-flex xs12 md6 class="pl-3 pr-3">
+            <cities-list v-if="shouldShowCities" v-model="toCity" direction="to" />
           </v-flex>
 
-          <v-flex xs12 md6 class='pl-3 pr-3'>
-            <calendar v-model="fromDate" ref='to_search' direction='from' />
+          <v-flex xs12 md6 class="pl-3 pr-3">
+            <calendar v-model="fromDate" ref="to_search" direction="from" />
           </v-flex>
 
-          <v-flex xs12 md6 class='pl-3 pr-3'>
-            <calendar v-model="toDate" :fromDate="fromDate" direction='to' />
+          <v-flex xs12 md6 class="pl-3 pr-3">
+            <calendar v-model="toDate" :fromDate="fromDate" direction="to" />
           </v-flex>
 
-          <v-flex md4 offset-md4 xs12 class='pl-3 pr-3'>
-            <v-btn block class='white--text search-font rounded-search' color="error" @click='validateSearch'
-              :disabled="loadingServices">
+          <v-flex xs12 md6 class="pl-3 pr-3">
+            <subdivision-list v-if="shouldShowDivisions" />
+          </v-flex>
+
+          <v-flex xs12 md6 class="pl-3 pr-3">
+            <agency-list v-if="shouldShowDivisions" />
+          </v-flex>
+
+          <v-flex md4 offset-md4 xs12 class="pl-3 pr-3">
+            <v-btn
+              block
+              class="white--text search-font rounded-search"
+              color="error"
+              @click="validateSearch"
+              :disabled="loadingServices"
+            >
               <span v-lang.search></span>
             </v-btn>
           </v-flex>
@@ -47,6 +60,8 @@
 import CountriesList from './Countries'
 import CitiesList from './Cities'
 import Calendar from './Calendar'
+import SubdivisionList from './SubdivisionList'
+import AgencyList from './AgencyList'
 import { mapGetters, mapState } from 'vuex'
 import moment from 'moment'
 
@@ -54,7 +69,9 @@ export default {
   components: {
     CountriesList,
     CitiesList,
-    Calendar
+    Calendar,
+    SubdivisionList,
+    AgencyList
   },
   data() {
     return {
@@ -65,11 +82,27 @@ export default {
       toDivPolCity: null,
       toCity: null,
       toCountry: null,
-      toDate: '',
+      toDate: ''
+    }
+  },
+  computed: {
+    ...mapState({
+      //oroginCountryCode && destinyCountryCode
+      oCountrycd: ['originCountryCode'],
+      dCountrycd: ['destinyCountryCode'],
+      searching: ['searching'],
+    }),
+    ...mapGetters({
+      loadingServices: ['getLoadingService']
+    }),
+    shouldShowCities() {
+      return this.oCountrycd > 0 && this.dCountrycd > 0
+    },
+    shouldShowDivisions() {
+      return this.shouldShowCities && this.searching.from_date && this.searching.to_date
     }
   },
   watch: {
-
     /*
     fromDate(value) {
       const diff = moment(this.toDate).diff(value, 'days')
@@ -79,14 +112,41 @@ export default {
       }
     }
     */
+   'searching.subdivision'(value, old) {
+      if (!value || value === old) return;
+
+      const params = {
+        subdivision: value.codSubdivision,
+        servicio: 2,
+        ruta: 478,
+        salida: this.fromDate,
+        pais: this.searching.from_country,
+        divpol: this.searching.from_div_city,
+        ciudad: this.searching.from_city
+      }
+      this.$store.dispatch('LOAD_AGENCIES', params)
+    }
+  },
+  mounted() {
+    this.$store.dispatch('LOAD_SUBDIVISIONS')
+    this.$store.dispatch('LOAD_COUNTRIES_LIST')
+    this.$store.dispatch('LOAD_CITIES_LIST')
+
+    this.fromDate = this.$store.state.searching.from_date
+    this.toDate = this.$store.state.searching.to_date
+    //
+    this.fromCountry = this.$store.state.searching.from_country
+    this.toCountry = this.$store.state.searching.to_country
+    //
+    this.fromCity = this.$store.state.searching.from_city
+    this.toCity = this.$store.state.searching.to_city
   },
   methods: {
-    
     validateSearch() {
-      console.log(`pais origen:${this.fromCountry} / pais destino: ${this.toCountry} / ${this.fromCity} ${this.fromDate} ${this.toCity} ${this.toDate}`)
+      console.log(
+        `pais origen:${this.fromCountry} / pais destino: ${this.toCountry} / ${this.fromCity} ${this.fromDate} ${this.toCity} ${this.toDate}`
+      )
 
-
-      /*
       this.$notify({
         group: 'stuck-load',
         title: this.translate('search_services'),
@@ -104,10 +164,8 @@ export default {
         fromCountry: this.fromCountry,
         toCountry: this.toCountry,
         fromCity: this.fromCity,
-        toCity: this.toCity,
+        toCity: this.toCity
       })
-      console.log(this.fromCity, this.toCity, this.fromDate, this.toDate, this.fromCountry, this.toCountry)
-      */
     },
     setUserSearchingData() {
       this.$store.dispatch('SET_NEW_USER_SEARCHING_DATE', {
@@ -136,33 +194,6 @@ export default {
       })
     }
   },
-
-  computed:
-    mapState(
-      {
-        //oroginCountryCode && destinyCountryCode
-        oCountrycd: ['originCountryCode'],
-        dCountrycd: ['destinyCountryCode']
-      }
-    ),
-  ...mapGetters({
-    loadingServices: ['getLoadingService']
-  }),
-
-  mounted() {
-    this.$store.dispatch('LOAD_COUNTRIES_LIST')
-    this.$store.dispatch('LOAD_CITIES_LIST')
-
-    this.fromDate = this.$store.state.searching.from_date
-    this.toDate = this.$store.state.searching.to_date
-    //
-    this.fromCountry = this.$store.state.searching.from_country
-    this.toCountry = this.$store.state.searching.to_country
-    //
-    this.fromCity = this.$store.state.searching.from_city
-    this.toCity = this.$store.state.searching.to_city
-
-  }
 }
 </script>
 
@@ -194,7 +225,7 @@ export default {
 }
 
 div.card.search_card {
-  background-color: #194E8Edd !important;
+  background-color: #194e8edd !important;
   color: #fff;
 }
 

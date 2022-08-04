@@ -3,6 +3,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
 import APIService from '@/services/api/services'
+import APIAgencies from '@/services/api/agencies'
 // import APICities from '@/services/api/cities'
 import router from '../router'
 import moment from 'moment'
@@ -39,7 +40,9 @@ const store = new Vuex.Store({
       from_div_city: null,
       to_div_city: null,
       from_date: null,
-      to_date: null
+      to_date: null,
+      subdivision: null,
+      agency: null,
     },
     services: {
       data: [],
@@ -81,6 +84,8 @@ const store = new Vuex.Store({
       usuario: {},
       active: false
     },
+    subdivisions: [],
+    agencies: [],
     history: {
       to: '',
       from: ''
@@ -89,7 +94,37 @@ const store = new Vuex.Store({
   },
 
   actions: {
-    //
+    async LOAD_SUBDIVISIONS({ commit }) {
+      try {
+        const res = await (await fetch(`${nsaEndPoints.listaEmpresas}`)).json()
+        // console.log(nsaEndPoints.listaPaises)
+        commit('SET_SUBDIVISIONS', { list: res })
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    SET_SUBDIVISION({ commit }, payload) {
+      commit('SET_SUBDIVISION', {selected: payload})
+    },
+    async LOAD_AGENCIES({ commit }, payload) {
+      try {
+        const params = _.pick(payload, ['subdivision', 'servicio', 'ruta', 'salida', 'pais', 'divpol', 'ciudad'])
+        const hora = moment().format('HH:mm')
+        const salida = params.salida.split('-').reverse().join('/') + ' ' + hora
+        const res = await APIAgencies.getByFilters({
+          ...params,
+          salida,
+          hora,
+          dia: 'MA',
+        })
+        commit('SET_AGENCIES', { list: res.data })
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    SET_AGENCY({ commit }, payload) {
+      commit('SET_AGENCY', {selected: payload})
+    },
     async LOAD_COUNTRIES_LIST({ commit }) {
       try {
         const res = await (await fetch(`${nsaEndPoints.listaPaises}`)).json()
@@ -108,8 +143,6 @@ const store = new Vuex.Store({
         })
       */
     },
-    //
-
     async LOAD_CITIES_LIST({ commit }) {
       try {
         const res = await (await fetch(`${nsaEndPoints.ciudadParadas}`)).json()
@@ -159,29 +192,23 @@ const store = new Vuex.Store({
         return
       }
       const requestGoing = APIService.get({
-        // origen: fromCity.codigo, // Original
         paisOrigen: fromCountry.codPais,
         paisDestino: toCountry.codPais,
         ciudadOrigen: fromCity.codPais,
-        // destino: toCity.codigo, // Original
         ciudadDestino: toCity.codPais,
-        fecha: fromDate.replace(/-/g, ''),
+        fecha: fromDate.split('-').reverse().join('/'),
         hora: '0000',
-        // idSistema: 2
         idSistema: 1
       })
       let requestReturn
       if (toDate != null) {
         requestReturn = APIService.get({
-          // origen: toCity.codigo, // Original
           paisOrigen: toCountry.codPais,
           ciudadOrigen: toCity.codPais,
-          // destino: fromCity.codigo, // Original
           PaisDestino: fromCountry.codPais,
           ciudadDestino: fromCity.codPais,
           fecha: toDate.replace(/-/g, ''),
           hora: '0000',
-          // idSistema: 2
           idSistema: 1
         })
       }
@@ -384,6 +411,18 @@ const store = new Vuex.Store({
     },
 
     //
+    SET_AGENCIES: (state, { list }) => {
+      state.agencies = list
+    },
+    SET_AGENCY: (state, { selected }) => {
+      state.searching.agency = selected
+    },
+    SET_SUBDIVISIONS: (state, { list }) => {
+      state.subdivisions = list
+    },
+    SET_SUBDIVISION: (state, { selected }) => {
+      state.searching.subdivision = selected
+    },
     SET_COUNTRIES_LIST: (state, { list }) => {
       state.countries = list
     },

@@ -1,11 +1,9 @@
 import axios from 'axios'
-import endPoints from '@/endPoints'
-
-const services = endPoints.services
+import endPoints from '@/nsaEndpoints'
 
 export default {
   get (params) {
-    return axios.post(services, params, {
+    return axios.get(endPoints.listaViajes, {params}, {
       headers: { 'Content-Type': 'application/json' }
     })
   }

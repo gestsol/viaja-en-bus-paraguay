@@ -1,7 +1,7 @@
 import axios from 'axios'
-import endPoints from '@/endPoints'
+import endPoints from '@/nsaEndpoints'
 
-const auth = endPoints.auth
+const auth = endPoints.login
 const registro = endPoints.registro
 const cambioPassword = endPoints.cambioPassword
 const recuperarPassword = endPoints.recuperarPassword

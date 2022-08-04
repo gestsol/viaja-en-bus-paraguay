@@ -13,7 +13,7 @@ export default {
   ciudadParadas: `${baseTickets}/v1/viaje-buses/ciudad-paradas`,
   agenciaParadas: `${baseTickets}/v1/viaje-buses/agencia-paradas?subdivision=3&servicio=2&ruta=478&dia=MA&hora=16:00&salida=08/10/2019 16:00:00&pais=1&divpol=10&ciudad=1`,
   listaEmpresas: `${baseLists}/v2/empresa/subdivision`,
-  listaViajes: `${baseTickets}/v1/viaje-buses/lista-viaje?fecha=13/12/2018&agencia=2&paisOrigen=1&divpolOrigen=1&ciudadOrigen=1&paisDestino=1&divpolDestino=2&ciudadDestino=1`,
+  listaViajes: `${baseTickets}/v1/viaje-buses/lista-viaje`,
   listaAsientos: `${baseTickets}/v1/viaje-buses/lista-asiento?agencia=2&subdivision=3&servicio=2&ruta=481&salida=01/12/2018 00:00:00&paisOrigen=1&divpolOrigen=10&ciudadOrigen=1&paisDestino=1&divpolDestino=11&ciudadDestino=1&piso=0`,
   datosCliente: `${baseLists}/v2/cliente/datos?nroDocumento=4476360&codCliente&tipoDocumento=1`,
   procesoVenta: `${baseTickets}/v1/venta/guardar`,

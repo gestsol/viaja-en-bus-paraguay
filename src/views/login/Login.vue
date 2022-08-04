@@ -101,20 +101,10 @@
       }
     },
     methods: {
-      login () {
-        this.loading = true
-        API.auth({usuario: this.email, password: this.password})
-        .then(response => {
-          const data = JSON.parse(JSON.stringify(response.data))
-          if (!data.exito) {
-            this.$notify({
-              group: 'error',
-              title: this.translate('login'),
-              type: 'error',
-              text: this.translate('login_error')
-            })
-            return
-          }
+      async login () {
+        try {
+          this.loading = true
+          const {data} = await API.auth({username: this.email, password: this.password})
           let completeName = data.usuario.apellidoPaterno ? data.usuario.apellidoPaterno + ' ' : ''
           completeName = data.usuario.apellidoMaterno ? completeName + data.usuario.apellidoMaterno : completeName
           completeName = data.usuario.nombre + ' ' + completeName.trim()
@@ -131,11 +121,11 @@
           this.$store.dispatch('SET_USER',
             {
               userData: {
-                token: data.token,
+                token: data.access_token,
                 usuario: data.usuario,
-                payment_info: paymentInfo,
-                cambiaClave: data.cambiaClave,
-                urlInicial: data.urlInicial,
+                // payment_info: paymentInfo,
+                // cambiaClave: data.cambiaClave,
+                // urlInicial: data.urlInicial,
                 active: true
               }
             }
@@ -146,11 +136,16 @@
           } else {
             this.$router.push({path: '/'})
           }
-        })
-        .catch(err => console.log(err))
-        .finally(() => {
+        } catch (err) {
+          this.$notify({
+            group: 'error',
+            title: this.translate('login'),
+            type: 'error',
+            text: this.translate('login_error')
+          })
+        } finally {
           this.loading = false
-        })
+        }
       }
     }
   }
