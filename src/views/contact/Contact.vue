@@ -17,7 +17,7 @@
                             v-model="name"
                             :label="translate('name')"
                             outline-1
-                            color="grey lighten-4"
+                            color="red"
                             :rules="generalRules"
                             required
                           ></v-text-field>
