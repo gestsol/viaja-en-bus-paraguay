@@ -43,6 +43,8 @@ const store = new Vuex.Store({
       to_date: null,
       subdivision: null,
       agency: null,
+      servicio: 2,
+      ruta: 478,
     },
     services: {
       data: [],
@@ -177,10 +179,21 @@ const store = new Vuex.Store({
 
 
 
-    LOAD_SERVICES_LIST({ commit, dispatch }, payload) {
+    LOAD_SERVICES_LIST({ commit, dispatch, state }, payload) {
       // added country to the payload
-      const { fromDate, toDate, fromCity, toCity, fromCountry, toCountry } = payload
-      if (fromDate == null || fromDate === '') {
+      // const { fromDate, toDate, fromCity, toCity, fromCountry, toCountry } = payload
+      const {
+        agency,
+        from_div_city,
+        to_div_city,
+        from_date, to_date,
+        from_country,
+        to_country,
+        from_city,
+        to_city
+      } = state.searching;
+
+      if (!from_date) {
         Vue.notify({
           group: 'error',
           title: this.$translate('services'),
@@ -191,27 +204,30 @@ const store = new Vuex.Store({
         dispatch('SET_LOADING_SERVICE', { loading: false })
         return
       }
+
       const requestGoing = APIService.get({
-        paisOrigen: fromCountry.codPais,
-        paisDestino: toCountry.codPais,
-        ciudadOrigen: fromCity.codPais,
-        ciudadDestino: toCity.codPais,
-        fecha: fromDate.split('-').reverse().join('/'),
-        hora: '0000',
-        idSistema: 1
+        agencia: agency,
+        fecha: from_date.split('-').reverse().join('/'),
+        paisOrigen: from_country,
+        divpolOrigen: from_div_city,
+        paisDestino: to_country,
+        divpolDestino: to_div_city,
+        ciudadOrigen: from_city,
+        ciudadDestino: to_city
       })
+
       let requestReturn
-      if (toDate != null) {
-        requestReturn = APIService.get({
-          paisOrigen: toCountry.codPais,
-          ciudadOrigen: toCity.codPais,
-          PaisDestino: fromCountry.codPais,
-          ciudadDestino: fromCity.codPais,
-          fecha: toDate.replace(/-/g, ''),
-          hora: '0000',
-          idSistema: 1
-        })
-      }
+      // if (toDate != null) {
+      //   requestReturn = APIService.get({
+      //     paisOrigen: to_country.codPais,
+      //     ciudadOrigen: to_city.codPais,
+      //     PaisDestino: from_country.codPais,
+      //     ciudadDestino: from_city.codPais,
+      //     fecha: to_date.replace(/-/g, ''),
+      //     hora: '0000',
+      //     idSistema: 1
+      //   })
+      // }
       dispatch('SET_LOADING_SERVICE', { loading: true })
       Promise.all([requestGoing, requestReturn])
         .then(responses => {

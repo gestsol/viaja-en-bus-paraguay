@@ -117,8 +117,8 @@ export default {
 
       const params = {
         subdivision: value.codSubdivision,
-        servicio: 2,
-        ruta: 478,
+        servicio: this.searching.service,
+        ruta: this.searching.route,
         salida: this.fromDate,
         pais: this.searching.from_country,
         divpol: this.searching.from_div_city,

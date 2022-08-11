@@ -29,8 +29,8 @@
                           <v-flex xs4 md6>
                             <v-layout row wrap>
                               <v-flex>
-                                <img 
-                                src="/static/imgs/logos/NSA.png" 
+                                <img
+                                src="/static/imgs/logos/NSA.png"
                                 class="service-company-image">
                               </v-flex>
                               <v-flex>
@@ -91,14 +91,14 @@
                                     departure_board
                                   </v-icon>
                                 </div>
-                                <small class="text-xs-center"> 
-                                  <!-- {{item.horaProgramada}} --> 
-                                  Por definir 
+                                <small class="text-xs-center">
+                                  <!-- {{item.horaProgramada}} -->
+                                  Por definir
                                   </small>
                               </v-flex>
                               <v-flex sm2 xs3>
                                 <span class="service-title d-block">
-                                   
+
                                 </span>
                                 <span class="headline d-block" style="font-size: 1rem !important;">
                                  <!-- {{item.horaProgramada}} --> Sin definir fecha
@@ -153,7 +153,7 @@
             </div>
             <v-card-title class="px-0">
               <v-container :key="index" v-for="(company, index) in getPricesByCompany" class="service-item px-0">
-                
+
                 <v-expansion-panel class="arrow">
                   <v-expansion-panel-content>
                     <div slot="header">
@@ -218,7 +218,7 @@
                               </v-flex>
                               <v-flex xs2 class="pr-5 text-xs-center" v-if="windowSize.x > 576">
                                 <div style="position: relative">
-                                  
+
                                   <v-icon class="display-2" color="error">
                                     departure_board
                                   </v-icon>
@@ -329,7 +329,7 @@ export default {
     }),
   },
   mounted() {
-    this.$store.dispatch('LOAD_TRAVELS_LIST')
+    this.$store.dispatch('LOAD_SERVICES_LIST')
   }
 
 
