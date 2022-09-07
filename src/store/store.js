@@ -9,7 +9,7 @@ import router from '../router'
 import moment from 'moment'
 import companiesList from '@data/companies.json'
 // import citiesList from '@data/cities.json'
-import nsaEndPoints from '../nsaEndpoints'
+import nsaEndPoints from '@data/nsaEndpoints'
 
 Vue.use(Vuex)
 const store = new Vuex.Store({

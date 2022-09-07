@@ -1,5 +1,5 @@
 import axios from 'axios'
-import endPoints from '@/nsaEndpoints'
+import endPoints from '@data/nsaEndPoints'
 
 const auth = endPoints.login
 const registro = endPoints.registro

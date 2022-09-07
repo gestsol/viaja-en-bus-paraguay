@@ -1,5 +1,5 @@
 import axios from 'axios'
-import endPoints from '@/nsaEndpoints'
+import endPoints from '@data/nsaEndPoints'
 
 export default {
   get (params) {
