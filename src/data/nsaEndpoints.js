@@ -3,7 +3,8 @@ const base = 'https://api.nsa.com.py/develop'
 const baseSesion = `${base}/auth/api`
 const baseLists = `${base}/commons/api`
 const baseTickets = `${base}/pasajes/api`
-const endPoints = {
+
+export default {
   login: `${baseSesion}/v1/login`,
   listaPaises: `${baseLists}/v2/pais/lista`,
   listaProximos: `${baseTickets}/v1/viaje-buses/proximos`,
@@ -23,4 +24,3 @@ const endPoints = {
   recorridoViaje: `${baseTickets}/v1/viaje-buses/recorrido?subdiv=3&servicio=2&ruta=481&dia=SA&hora=00:00&salida=01/12/2018 00:00:00`,
   cancelar: `${baseTickets}/v1/venta/cancelar`
 }
-export default endPoints
