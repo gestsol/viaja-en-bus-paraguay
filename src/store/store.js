@@ -204,10 +204,14 @@ const store = new Vuex.Store({
         dispatch('SET_LOADING_SERVICE', { loading: false })
         return
       }
-
+      moment.locale(this.language)
+      //console.log(this.language)
+      //const format = 'DD/MM/YYYY'
+      //let dateFormatted = moment(from_date).format(format)
+      //console.log("data" + dateFormatted)
       const requestGoing = APIService.get({
         agencia: agency,
-        fecha: from_date.split('-').reverse().join('/'),
+        fecha: "20/09/2022",
         paisOrigen: from_country,
         divpolOrigen: from_div_city,
         paisDestino: to_country,
