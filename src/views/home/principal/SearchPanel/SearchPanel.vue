@@ -156,7 +156,7 @@ export default {
       if (fromFail) {
         localStorage.removeItem('fromFail')
       }
-      this.setUserSearchingData()
+      // this.setUserSearchingData()
       this.$store.dispatch('LOAD_SERVICES_LIST', {
         goTo: true,
         fromDate: this.fromDate,
