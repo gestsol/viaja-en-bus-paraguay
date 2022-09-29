@@ -42,6 +42,8 @@ let en = () => {
     blog: 'Blog',
     totems: 'Totems',
     our_partnes: 'Our partners',
+    from_country: 'Depart country',
+    to_country: 'Destiny country',
     from_city: 'From where?',
     to_city: 'Where do you want to go?  (optional)',
     from_date: 'Choose your date',

@@ -1,5 +1,4 @@
 import axios from 'axios'
-
 const base = 'https://api.nsa.com.py/develop'
 
 const baseSesion = `${base}/auth/api`
@@ -26,14 +25,10 @@ const endPoints = {
   recorridoViaje: `${baseTickets}/v1/viaje-buses/recorrido?subdiv=3&servicio=2&ruta=481&dia=SA&hora=00:00&salida=01/12/2018 00:00:00`,
   cancelar: `${baseTickets}/v1/venta/cancelar`
 }
-
-const cities = endPoints.cities
+const agencies = endPoints.agenciaParadas
 
 export default {
-  getCities () {
-    return axios.post(cities)
-  },
-  getCityByCode (code) {
-    return axios.post(cities, code)
+  getSeats (params) {
+    return axios.get(agencies, {params})
   }
 }

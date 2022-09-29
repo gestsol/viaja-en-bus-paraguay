@@ -27,13 +27,10 @@ const endPoints = {
   cancelar: `${baseTickets}/v1/venta/cancelar`
 }
 
-const cities = endPoints.cities
+const agencies = endPoints.agenciaParadas
 
 export default {
-  getCities () {
-    return axios.post(cities)
-  },
-  getCityByCode (code) {
-    return axios.post(cities, code)
+  getByFilters(params) {
+    return axios.get(agencies, { params })
   }
 }
